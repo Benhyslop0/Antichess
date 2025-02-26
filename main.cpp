@@ -47,23 +47,3 @@ int main(int argc, char* argv[]) {
 
     return app.exec(); 
 }
-
-
-
-
-/*import QtQuick 2.2
-import QtQuick.Window 2.2
-import CustomWidgets 1.0
-
-Window{
-    visible: true
-    width : 640
-    height : 480
-    title : "antichess"
-    squaretile{
-        id: squaretile
-        anchors.centerIn : parent
-        Component.onCompleted : setProperties(Qt.gray,100,0,0)
-    }
-}
-*/
