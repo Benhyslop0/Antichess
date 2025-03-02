@@ -1,17 +1,19 @@
-#ifndef PAWN_H
-#define PAWN_H
+#pragma once
+
+#include <QLabel>
+#include <QPixmap>
+#include <QWidget>
+#include <QMainWindow>
 
 
-class Pawn
-{
+class Pawn : public QLabel {
+    Q_OBJECT
 public:
-    Pawn();
-    void posassign(int cx,int cy,int nx, int ny);
+    void posassign(int cx, int cy, int nx, int ny);
     bool movement(int piecenum);
+    explicit Pawn(QWidget* parent = nullptr);
 private:
     int piecenum;
-    int currow,curcol,wantrow,wantcol;
+    int currow, curcol, wantrow, wantcol;
 
 };
-
-#endif // PAWN_H
