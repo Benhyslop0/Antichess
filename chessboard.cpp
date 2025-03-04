@@ -1,65 +1,10 @@
 #include "chessboard.h"
-#include <QMainWindow>
-#include <QWidget>
-#include <QPainter>
-#include <QMouseEvent>
-#include <QDebug>
+
 #include "pawn.h"
-chessboard::chessboard(QWidget *parent)
-    : QMainWindow(parent), a_grid(new grid(clkco))
-{
-
-    setWindowTitle("Chess Board");  // title of the window
-    setFixedSize(800, 800);  // 800x800 pixels window
-}
-
-chessboard::~chessboard() {}
-
-void chessboard::paintEvent(QPaintEvent *event)
-{
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
-
-    // Drawing a basic 8x8 chessboard
-    int squareSize = width() / 8;
-    for (int row = 0; row < 8; ++row) {
-        for (int col = 0; col < 8; ++col) {
-            if ((row + col) % 2 == 0)
-                painter.setBrush(Qt::white);
-            else
-                painter.setBrush(Qt::black);
-            painter.drawRect(col * squareSize, row * squareSize, squareSize, squareSize);
-        }
-    }
-}
-
-void chessboard::mousePressEvent(QMouseEvent *event)
-{
-    //grid a_grid;
-    int squareSize = width() / 8;
-    int row = event->position().y() / squareSize;
-    int col = event->position().x() / squareSize;
 
 
-    qDebug() << "Clicked on square: (" << row << ", " << col << ")";
-
-    if(clkco == 0){
-        firstclkro =row;
-        firstclkco =col;
-
-        clkco = 1;
-
-    }
-    else if(clkco ==1){
-        a_grid->grid_pressed(firstclkro,firstclkco,row,col,squareSize);
-
-    }
-
-
-
-}
 //checking for what piece has been clicked
-int grid::grid_pressed(int row,int col,int nrow,int ncol,int squareSize){
+int chessboard::grid_pressed(int row,int col,int nrow,int ncol,int squareSize){
     Pawn p;
     bool wthere = false;
     bool bthere = false;
@@ -131,7 +76,7 @@ int grid::grid_pressed(int row,int col,int nrow,int ncol,int squareSize){
             //can it be attacking?
             if(nrow == row-1 && bthere == true && (ncol == col+1 || ncol == col-1)){
                 updated_grid(row,col,nrow,ncol,pos);
-                qDebug()<<"haha i have taken";
+                std::cout<<"haha i have taken";
             }
             else if(wthere ==true ||bthere ==true){
                 qDebug()<<"cant move there mate";
@@ -163,10 +108,19 @@ int grid::grid_pressed(int row,int col,int nrow,int ncol,int squareSize){
 
     return 0;
 }
-int grid::updated_grid(int rowold,int colold,int rownew,int colnew,int piecenum){
+int chessboard::updated_grid(int rowold,int colold,int rownew,int colnew,int piecenum){
 
     arr[rowold][colold]=0;
     arr[rownew][colnew] = piecenum;
     clkco = 0;
     return 0;
 }
+void chessboard::printBoard(){
+    printf(" %c | %c | %c ", board[0][0], board[0][1], board[0][2]);
+    printf("\n---|---|---\n");
+    printf(" %c | %c | %c ", board[1][0], board[1][1], board[1][2]);
+    printf("\n---|---|---\n");
+    printf(" %c | %c | %c ", board[2][0], board[2][1], board[2][2]);
+    printf("\n---|---|---\n");
+    printf("\n");
+};
