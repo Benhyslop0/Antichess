@@ -1,5 +1,6 @@
 #include "chessboard.h"
-
+#include <iostream>
+#include <stdio.h>
 #include "pawn.h"
 
 
@@ -50,10 +51,10 @@ int chessboard::grid_pressed(int row,int col,int nrow,int ncol,int squareSize){
         else{
             if(nrow == row+1 && wthere == true && (ncol == col+1 || ncol == col-1)){
                 updated_grid(row,col,nrow,ncol,pos);
-                qDebug()<<"haha i have taken";
+                std::cout<<"haha i have taken";
             }
             else if(wthere ==true ||bthere ==true){
-                qDebug()<<"cant move there mate";
+                std::cout<<"cant move there mate";
             }
             else{
                 updated_grid(row,col,nrow,ncol,pos);
@@ -79,7 +80,7 @@ int chessboard::grid_pressed(int row,int col,int nrow,int ncol,int squareSize){
                 std::cout<<"haha i have taken";
             }
             else if(wthere ==true ||bthere ==true){
-                qDebug()<<"cant move there mate";
+                std::cout<<"cant move there mate";
             }
             else{
                 updated_grid(row,col,nrow,ncol,pos);
@@ -116,11 +117,19 @@ int chessboard::updated_grid(int rowold,int colold,int rownew,int colnew,int pie
     return 0;
 }
 void chessboard::printBoard(){
-    printf(" %c | %c | %c ", board[0][0], board[0][1], board[0][2]);
+    for(int i = 61;i<68;i++){
+        char c = i;
+        std::cout<<c<<"|";
+        for(int j = 0;j<8;j++){
+            std::cout<<arr[i-61][j]<<",";
+        }
+        
+        }
+    };
+    /*printf(" %c | %c | %c ", board[0][0], board[0][1], board[0][2]);
     printf("\n---|---|---\n");
     printf(" %c | %c | %c ", board[1][0], board[1][1], board[1][2]);
     printf("\n---|---|---\n");
     printf(" %c | %c | %c ", board[2][0], board[2][1], board[2][2]);
     printf("\n---|---|---\n");
-    printf("\n");
-};
+    printf("\n");*/

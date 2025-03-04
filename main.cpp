@@ -1,12 +1,17 @@
-#include <QAapplication>
+
 #include "chessboard.h"
 
-int main(int argc, char *argv[])
+int main()
 {
-    QApplication a(argc, argv);
-
-    ChessBoard w;  // Create an instance of ChessBoard
-    w.show();  // Show the ChessBoard as the main window
-
-    return a.exec();  // Enter the Qt event loop
+    bool gameover = false;
+    chessboard w;  // Create an instance of ChessBoard
+     // Show the ChessBoard as the main window
+    while(!gameover)
+    {
+        w.printBoard();
+        //w.grid_pressed(0,0,1,0,3);
+        //w.printBoard();
+        gameover = true;
+    }
+    return 0;
 }
