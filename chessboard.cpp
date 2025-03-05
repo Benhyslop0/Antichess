@@ -2,11 +2,13 @@
 #include <iostream>
 #include <stdio.h>
 #include "pawn.h"
+#include "king.h"
 
 
 //checking for what piece has been clicked
 int chessboard::grid_pressed(int row,int col,int nrow,int ncol,int squareSize){
     Pawn p;
+    King k;
     bool wthere = false;
     bool bthere = false;
     int pos = arr[row][col];
@@ -34,11 +36,33 @@ int chessboard::grid_pressed(int row,int col,int nrow,int ncol,int squareSize){
         //is a bishop
         break;
     case 4 :
-        //is a king
+        //is a queen
+
         break;
     case 5 :
-        //is a queen
-        break;
+        k.posassign(row,col,nrow,ncol);
+                //if not nothing happens and the user can try again although am having issues with updating currow
+                if(!k.movement()){
+                    clkco = 0;
+                }
+                //if it can move then the grid will update itself
+                else{
+                    if(wthere == true){
+                        updated_grid(row,col,nrow,ncol,pos);
+                        std::cout<<"haha i have taken";
+                    }
+                    else if(bthere ==true){
+                        std::cout<<"cant move there mate";
+                    }
+                    else{
+                        updated_grid(row,col,nrow,ncol,pos);
+                    }
+
+                }
+
+            break;
+            //is a king
+        
     case 6 :
         //is a pawn
         //a good example of how grid asks pawn if it can move to a position
@@ -103,7 +127,28 @@ int chessboard::grid_pressed(int row,int col,int nrow,int ncol,int squareSize){
         //is a queen
         break;
     case 12 :
-        //is a queen
+        //is a king
+        k.posassign(row,col,nrow,ncol);
+            //if not nothing happens and the user can try again although am having issues with updating currow
+            if(!k.movement()){
+                clkco = 0;
+            }
+            //if it can move then the grid will update itself
+            else{
+                if(bthere == true){
+                    updated_grid(row,col,nrow,ncol,pos);
+                    std::cout<<"haha i have taken";
+                }
+                else if(wthere ==true){
+                    std::cout<<"cant move there mate";
+                }
+                else{
+                    updated_grid(row,col,nrow,ncol,pos);
+                }
+
+            }
+
+        break;
         break;
     }
 
