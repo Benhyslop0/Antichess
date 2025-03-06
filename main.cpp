@@ -1,5 +1,3 @@
-
-#include "chessboard.h"
 #include <iostream>
 int main()
 {
@@ -17,13 +15,13 @@ int main()
         w.printBoard();
         std::cout << "\n\n\n\n\n\nMove From: ";
         std::cin >> input;
-        row = input[0]-'A';
-        col = input[1]-'1';
+        row = input[1]-'1';
+        col = input[0]-'A';
         std::cout << "Move To: ";
         std::cin >> input;
         std::cout << "\n\n\n\n\n\n";
-        nrow = input[0]-'A';
-        ncol = input[1]-'1';
+        nrow = input[1]-'1';
+        ncol = input[0]-'A';
         w.grid_pressed(row, col, nrow, ncol);
        
     }
