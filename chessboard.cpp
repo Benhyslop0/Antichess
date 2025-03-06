@@ -178,10 +178,10 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol) {
         }
         //if it can move then the grid will update itself
         else {
-            if (wthere == true) {
+            if (bthere == true) {
                 updated_grid(row, col, nrow, ncol, pos);
             }
-            else if (bthere == true) {
+            else if (wthere == true) {
 
             }
             else {
@@ -202,10 +202,10 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol) {
         }
         //if it can move then the grid will update itself
         else {
-            if (wthere == true) {
+            if (bthere == true) {
                 updated_grid(row, col, nrow, ncol, pos);
             }
-            else if (bthere == true) {
+            else if (wthere == true) {
 
             }
             else {
@@ -223,10 +223,10 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol) {
         }
         //if it can move then the grid will update itself
         else {
-            if (wthere == true) {
+            if (bthere == true) {
                 updated_grid(row, col, nrow, ncol, pos);
             }
-            else if (bthere == true) {
+            else if (wthere == true) {
 
             }
             else {
@@ -324,5 +324,6 @@ void chessboard::printBoard() {
     std::cout << "    1    2    3    4    5    6    7    8";
     
 };
+
 
 
