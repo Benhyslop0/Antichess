@@ -3,17 +3,21 @@
 #include <stdio.h>
 #include "pawn.h"
 #include "king.h"
-
+#include "Knight.h"
 
 //checking for what piece has been clicked
 int chessboard::grid_pressed(int row,int col,int nrow,int ncol,int squareSize){
     Pawn p;
     King k;
+    Knight kn;
+
     bool wthere = false;
     bool bthere = false;
     int pos = arr[row][col];
     int en = arr[nrow][ncol];
 
+    //need to check square positions to determine what colour of pieces are where
+    //this could come in handy for when we get to adding in player turns
     for(int i = 1 ; i<= 6 ; i++ ){
         if(i == en){
             bthere = true;
@@ -24,6 +28,7 @@ int chessboard::grid_pressed(int row,int col,int nrow,int ncol,int squareSize){
             wthere = true;
         }
     }
+
     //checking black
     switch(pos){
     case 1 :
@@ -31,21 +36,41 @@ int chessboard::grid_pressed(int row,int col,int nrow,int ncol,int squareSize){
         break;
     case 2 :
         //is a knight
+        kn.posassign(row,col,nrow,ncol);
+                //knight movement checker
+                if(!kn.movement()){
+                    clkco = 0;
+                }
+
+                //currently checking if its taking a piece, cant take its own teamate or if its just moving to an empty space
+                else{
+                    if(wthere == true){
+                        updated_grid(row,col,nrow,ncol,pos);
+                        std::cout<<"haha i have taken";
+                    }
+                    else if(bthere ==true){
+                        std::cout<<"cant move there mate";
+                    }
+                    else{
+                        updated_grid(row,col,nrow,ncol,pos);
+                    }
+                }
         break;
     case 3 :
         //is a bishop
         break;
     case 4 :
         //is a queen
-
         break;
     case 5 :
+        //is a king
         k.posassign(row,col,nrow,ncol);
-                //if not nothing happens and the user can try again although am having issues with updating currow
+                //kings movement checker
                 if(!k.movement()){
                     clkco = 0;
                 }
-                //if it can move then the grid will update itself
+
+                //same as in knight case
                 else{
                     if(wthere == true){
                         updated_grid(row,col,nrow,ncol,pos);
@@ -59,18 +84,18 @@ int chessboard::grid_pressed(int row,int col,int nrow,int ncol,int squareSize){
                     }
 
                 }
+        break;
 
-            break;
-            //is a king
-        
     case 6 :
         //is a pawn
-        //a good example of how grid asks pawn if it can move to a position
+        //thinking of just instantiating the pawn class and then calling the movement function then deleting object after used
         p.posassign(row,col,nrow,ncol);
-        //if not nothing happens and the user can try again although am having issues with updating currow
+
+        //pawns movement checker
         if(!p.movement(pos)){
             clkco = 0;
         }
+
         //if it can move then the grid will update itself
         else{
             if(nrow == row+1 && wthere == true && (ncol == col+1 || ncol == col-1)){
@@ -85,13 +110,12 @@ int chessboard::grid_pressed(int row,int col,int nrow,int ncol,int squareSize){
             }
 
         }
-
         break;
     }
+
     //checking white
     switch(pos){
     case 7 :
-
         p.posassign(row,col,nrow,ncol);
         p.movement(pos);
         if(!p.movement(pos)){
@@ -119,6 +143,26 @@ int chessboard::grid_pressed(int row,int col,int nrow,int ncol,int squareSize){
         break;
     case 9 :
         //is a knight
+        kn.posassign(row,col,nrow,ncol);
+
+            //white knights movement checker
+            if(!kn.movement()){
+                clkco = 0;
+            }
+
+            //board checking it's not taking its own teammate
+            else{
+                if(bthere == true){
+                    updated_grid(row,col,nrow,ncol,pos);
+                    std::cout<<"haha i have taken";
+                }
+                else if(wthere ==true){
+                    std::cout<<"cant move there mate";
+                }
+                else{
+                    updated_grid(row,col,nrow,ncol,pos);
+                }
+            }
         break;
     case 10 :
         //is a bishop
@@ -129,6 +173,7 @@ int chessboard::grid_pressed(int row,int col,int nrow,int ncol,int squareSize){
     case 12 :
         //is a king
         k.posassign(row,col,nrow,ncol);
+
             //if not nothing happens and the user can try again although am having issues with updating currow
             if(!k.movement()){
                 clkco = 0;
@@ -148,16 +193,17 @@ int chessboard::grid_pressed(int row,int col,int nrow,int ncol,int squareSize){
 
             }
 
-        break;
+        
         break;
     }
-
     return 0;
 }
 int chessboard::updated_grid(int rowold,int colold,int rownew,int colnew,int piecenum){
-
+    //changing grid in real time 
     arr[rowold][colold]=0;
     arr[rownew][colnew] = piecenum;
+    //clkco needs to be kept like this to debug a problem i was having earlier
+    //could be fixed when we add in turns
     clkco = 0;
     return 0;
 }
