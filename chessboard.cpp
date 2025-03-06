@@ -270,12 +270,12 @@ int chessboard::updated_grid(int rowold, int colold, int rownew, int colnew, int
     return 0;
 }
 void chessboard::printBoard() {
-    std::cout<< "    1    2    3    4    5    6    7    8\n  ----------------------------------------\n";
-    for (int i = 65; i < 73; i++) {
-        char c = i;
-        std::cout << c << "|";
+    std::cout<< "    A    B    C    D    E    F    G    H\n  ----------------------------------------\n";
+    for (int i = 0; i < 8; i++) {
+        
+        std::cout << i+1 << "|";
         for (int j = 0; j < 8; j++) {
-            int pos = arr[i - 65][j];
+            int pos = arr[i][j];
             switch (pos) {
             case 0:
                 std::cout << "    |";
@@ -318,12 +318,11 @@ void chessboard::printBoard() {
                 break;
             }
         }
-        std::cout << c<<" \n |----------------------------------------\n";
+        std::cout << i+1<<" \n |----------------------------------------\n";
 
     }
-    std::cout << "    1    2    3    4    5    6    7    8";
+    std::cout << "    A    B    C    D    E    F    G    H";
     
 };
-
 
 
