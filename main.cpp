@@ -1,49 +1,31 @@
-#include <QApplication>
-#include <QWidget>
-#include <QLabel>
-#include <QVBoxLayout>
+
 #include "chessboard.h"
-
-int main(int argc, char* argv[]) {
-
-    //initialises the window that everything will be displayed in
-    QApplication app(argc, argv);
-    QWidget window; 
-    window.setWindowTitle("antichess"); 
-    window.resize(800,800); 
-
-    //creates a grid layout given by qt
-    QGridLayout* layout = new QGridLayout; 
-    layout->setSpacing(0); 
-    layout->setContentsMargins(0, 0, 0, 0); 
-
-
-
-    //makes tiles using square object defined in chessboard.h and loops to make multiple of them
-    square* tiles[8][8];
-    for (int i = 0; i <8; i++) {
-        for (int j = 0; j <8; j++) {
-            Qt::GlobalColor col;
-            if ((i+j)%2> 0) {
-                col= Qt::white;
-            }
-            else {
-                col = Qt::darkGreen;
-            }
-            tiles[i][j] = new square(); 
-            tiles[i][j]->setProperties(col,100, i, j);
-            layout->addWidget(tiles[i][j],i,j);
-        }
-
+#include <iostream>
+int main()
+{
+    std::string input;
+    int row;
+    int col;
+    int nrow;
+    int ncol;
+    bool gameover = false;
+    chessboard w;  // Create an instance of ChessBoard
+    // Show the ChessBoard as the main window
+    
+    while (!gameover)
+    {
+        w.printBoard();
+        std::cout << "\n\n\n\n\n\nMove From: ";
+        std::cin >> input;
+        row = input[0]-'A';
+        col = input[1]-'1';
+        std::cout << "Move To: ";
+        std::cin >> input;
+        std::cout << "\n\n\n\n\n\n";
+        nrow = input[0]-'A';
+        ncol = input[1]-'1';
+        w.grid_pressed(row, col, nrow, ncol);
+       
     }
-
-
-
-
-
-    //nessecary lines to display window
-    window.setLayout(layout); 
-    window.show(); 
-
-    return app.exec(); 
+    return 0;
 }
