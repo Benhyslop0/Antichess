@@ -46,6 +46,7 @@ int main()
             std::cout<<"White Wins!";
             gameover = true;
         }
+        //switching between players
         if(wplaying == true){
             wplaying = false;
             bplaying = true;
