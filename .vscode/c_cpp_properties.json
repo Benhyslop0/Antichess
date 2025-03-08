@@ -1,0 +1,36 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "C:/Qt/6.9.0/msvc2022_64",
+                "C:/Qt/6.9.0/msvc2022_64/include/QtWidgets",
+                "C:/Qt/6.9.0/msvc2022_64/include",
+                "C:/Qt/6.9.0/msvc2022_64/include/QtGui",
+                "C:/Qt/6.9.0/msvc2022_64/include/QtCore",
+                "C:/Qt/6.9.0/msvc2022_64/include/QtNetwork",
+                "C:/Qt/6.9.0/msvc2022_64/include/QtXml",
+                "C:/Qt/6.9.0/msvc2022_64/include/QtSql",
+                "C:/Qt/6.9.0/msvc2022_64/include/QtTest",
+                "C:/Qt/6.9.0/msvc2022_64/include/QtQml",
+                "C:/Qt/6.9.0/msvc2022_64/include/QtQuick",
+                "C:/Qt/6.9.0/msvc2022_64/include/Qt3DCore",
+                "C:/Qt/6.9.0/msvc2022_64/include/Qt3DRender",
+                "C:/Qt/6.9.0/msvc2022_64/lib"
+                
+                
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "compilerPath": "C:\\msys64\\ucrt64\\bin\\gcc.exe",
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "windows-gcc-x64"
+        }
+    ],
+    "version": 4
+}

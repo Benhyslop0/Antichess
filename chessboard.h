@@ -16,7 +16,7 @@ public:
         {8,9,10,11,12,10,9,8} //top is white (1-6),bottom is black (7-12),no mans land is defined by 0s
     };
     
-    int grid_pressed(int row,int col,int nrow,int ncol,int squareSize);
+    int grid_pressed(int row,int col,int nrow,int ncol);
     int updated_grid(int rowold,int colold,int rownew,int colnew,int piecenum);
     void printBoard();
 private:
