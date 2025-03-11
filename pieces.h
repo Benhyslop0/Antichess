@@ -64,4 +64,3 @@ public:
 private:
     int currow, curcol, wantrow, wantcol;
 };
-
