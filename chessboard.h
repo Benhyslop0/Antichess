@@ -25,6 +25,7 @@ public:
     bool is_black_gone();
     //a function to print the board
     void printBoard();
+    bool cantake(chessboard board);
 private:
     int wtaken = 16;
     int btaken = 16;
