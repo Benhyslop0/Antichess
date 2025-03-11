@@ -6,7 +6,7 @@
 
 
 //checking for what piece has been clicked
-int chessboard::grid_pressed(int row, int col, int nrow, int ncol,chessboard board) {
+int chessboard::grid_pressed(int row, int col, int nrow, int ncol, chessboard board,bool bplaying,bool wplaying) {
     Pawn p;
     Queen q;
     King k;
@@ -28,6 +28,14 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol,chessboard boa
             wthere = true;
         }
     }
+    if (wplaying == true && pos > 6) {
+        std::cout << "Not your piece!";
+        return 0;
+    }
+    else if (bplaying == true && pos < 7) {
+        std::cout << "Not your piece!";
+        return 0;
+    }
     //checking black
     switch (pos) {
     case 1:
@@ -41,6 +49,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol,chessboard boa
         else {
             if (wthere == true) {
                 updated_grid(row, col, nrow, ncol, pos);
+                piece_is_taken(en);
             }
             else if (bthere == true) {
 
@@ -64,6 +73,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol,chessboard boa
         else {
             if (bthere == true) {
                 updated_grid(row, col, nrow, ncol, pos);
+                piece_is_taken(en);
                 std::cout << "haha i have taken";
             }
             else if (wthere == true) {
@@ -85,6 +95,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol,chessboard boa
         else {
             if (wthere == true) {
                 updated_grid(row, col, nrow, ncol, pos);
+                piece_is_taken(en);
             }
             else if (bthere == true) {
 
@@ -106,6 +117,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol,chessboard boa
         else {
             if (wthere == true) {
                 updated_grid(row, col, nrow, ncol, pos);
+                piece_is_taken(en);
             }
             else if (bthere == true) {
 
@@ -129,6 +141,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol,chessboard boa
         else {
             if (wthere == true) {
                 updated_grid(row, col, nrow, ncol, pos);
+                piece_is_taken(en);
             }
             else if (bthere == true) {
 
@@ -154,6 +167,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol,chessboard boa
         else {
             if (nrow == row + 1 && wthere == true && (ncol == col + 1 || ncol == col - 1)) {
                 updated_grid(row, col, nrow, ncol, pos);
+                piece_is_taken(en);
             }
             else if (wthere == true || bthere == true) {
             }
@@ -178,6 +192,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol,chessboard boa
             //can it be attacking?
             if (nrow == row - 1 && bthere == true && (ncol == col + 1 || ncol == col - 1)) {
                 updated_grid(row, col, nrow, ncol, pos);
+                piece_is_taken(en);
             }
             else if (wthere == true || bthere == true) {
 
@@ -224,6 +239,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol,chessboard boa
         else {
             if (bthere == true) {
                 updated_grid(row, col, nrow, ncol, pos);
+                piece_is_taken(en);
                 std::cout << "haha i have taken";
             }
             else if (wthere == true) {
@@ -266,6 +282,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol,chessboard boa
         else {
             if (bthere == true) {
                 updated_grid(row, col, nrow, ncol, pos);
+                piece_is_taken(en);
             }
             else if (wthere == true) {
 
@@ -287,6 +304,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol,chessboard boa
         else {
             if (bthere == true) {
                 updated_grid(row, col, nrow, ncol, pos);
+                piece_is_taken(en);
             }
             else if (wthere == true) {
 
@@ -311,10 +329,10 @@ int chessboard::updated_grid(int rowold, int colold, int rownew, int colnew, int
     return 0;
 }
 void chessboard::printBoard() {
-    std::cout<< "    A    B    C    D    E    F    G    H\n  ----------------------------------------\n";
+    std::cout << "\n    A    B    C    D    E    F    G    H\n  ----------------------------------------\n";
     for (int i = 0; i < 8; i++) {
-        
-        std::cout << i+1 << "|";
+
+        std::cout << i + 1 << "|";
         for (int j = 0; j < 8; j++) {
             int pos = arr[i][j];
             switch (pos) {
@@ -322,7 +340,7 @@ void chessboard::printBoard() {
                 std::cout << "    |";
                 break;
             case 1:
-                std::cout <<" br |";
+                std::cout << " br |";
                 break;
             case 2:
                 std::cout << " bn |";
@@ -359,11 +377,89 @@ void chessboard::printBoard() {
                 break;
             }
         }
-        std::cout << i+1<<" \n |----------------------------------------\n";
+        std::cout << i + 1 << " \n |----------------------------------------\n";
 
     }
     std::cout << "    A    B    C    D    E    F    G    H";
-    
+
 };
 
+
+void chessboard::piece_is_taken(int piecenum) {
+    if (piecenum == 1) {
+        btaken--;
+    }
+    else if (piecenum == 2) {
+        btaken--;
+    }
+    else if (piecenum == 3) {
+        btaken--;
+    }
+    else if (piecenum == 4) {
+        btaken--;
+    }
+    else if (piecenum == 5) {
+        btaken--;
+    }
+    else if (piecenum == 6) {
+        btaken--;
+    }
+    else if (piecenum == 7) {
+        wtaken--;
+    }
+    else if (piecenum == 8) {
+        wtaken--;
+    }
+    else if (piecenum == 9) {
+        wtaken--;
+    }
+    else if (piecenum == 10) {
+        wtaken--;
+    }
+    else if (piecenum == 11) {
+        wtaken--;
+    }
+    else if (piecenum == 12) {
+        wtaken--;
+    }
+}
+
+bool chessboard::is_white_gone() {
+    if (wtaken == 0) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool chessboard::is_black_gone() {
+    if (btaken == 0) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool cantake(chessboard brd,bool bturn, bool wturn) {
+    for (int i = 0; i <= 7; i++) {
+        for (int j = 0; j <= 7; j++) {
+            int pos = brd.arr[i][j];
+            if (wturn == true && pos >= 1 and pos = < 6) {
+                for (int k = 0; k <= 7; k++) {
+                    for (int l = 0; l <= 7; l++) {
+                        if(brd.grid_pressed(i,j,k, l, brd, wturn, bturn))
+                       
+
+
+
+
+
+                    }
+                }
+            }
+        }
+    }
+}
 
