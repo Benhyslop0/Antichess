@@ -23,7 +23,7 @@ bool Pawn::movement(int piecenum) {
                 return true;
             }
             else {
-                
+
                 return false;
             }
         }
@@ -32,7 +32,7 @@ bool Pawn::movement(int piecenum) {
                 return true;
             }
             else {
-                
+
                 return false;
             }
         }
@@ -45,7 +45,7 @@ bool Pawn::movement(int piecenum) {
                 return true;
             }
             else {
-                
+
                 return false;
             }
         }
@@ -54,7 +54,7 @@ bool Pawn::movement(int piecenum) {
                 return true;
             }
             else {
-               
+
                 return false;
             }
         }
@@ -189,7 +189,7 @@ bool Queen::movement(chessboard brd)
         }
 
     }
-        return false;
+    return false;
 
 
 }
@@ -268,11 +268,12 @@ void Rook::posassign(int cx, int cy, int nx, int ny)
 
 Bishop::Bishop() {}
 bool Bishop::movement(chessboard brd)
-{
+{  
     for (int i = 0; i <= 7; i++) {
+
         if (currow == wantrow + i && curcol == wantcol + i) {
             for (int j = 1; j < i; j++) {
-                int pos = brd.arr[currow-j][curcol - j];
+                int pos = brd.arr[currow - j][curcol - j];
                 if (pos > 0) {
                     return false;
                 }
@@ -281,7 +282,7 @@ bool Bishop::movement(chessboard brd)
         }
         else if (currow == wantrow + i && curcol == wantcol - i) {
             for (int j = 1; j < i; j++) {
-                int pos = brd.arr[currow-j][curcol + j];
+                int pos = brd.arr[currow - j][curcol + j];
                 if (pos > 0) {
                     return false;
                 }
@@ -290,7 +291,7 @@ bool Bishop::movement(chessboard brd)
         }
         else if (currow == wantrow - i && curcol == wantcol + i) {
             for (int j = 1; j < i; j++) {
-                int pos = brd.arr[currow+j][curcol - j];
+                int pos = brd.arr[currow + j][curcol - j];
                 if (pos > 0) {
                     return false;
                 }
@@ -299,7 +300,7 @@ bool Bishop::movement(chessboard brd)
         }
         else if (currow == wantrow - i && curcol == wantcol - i) {
             for (int j = 1; j < i; j++) {
-                int pos = brd.arr[currow+j][curcol + j];
+                int pos = brd.arr[currow + j][curcol + j];
                 if (pos > 0) {
                     return false;
                 }
