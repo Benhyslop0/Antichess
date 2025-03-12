@@ -6,7 +6,7 @@
 
 
 //checking for what piece has been clicked
-int chessboard::grid_pressed(int row, int col, int nrow, int ncol, chessboard board,bool bplaying,bool wplaying) {
+int chessboard::grid_pressed(int row, int col, int nrow, int ncol, chessboard board, bool bplaying, bool wplaying) {
     Pawn p;
     Queen q;
     King k;
@@ -17,6 +17,8 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, chessboard bo
     bool bthere = false;
     int pos = arr[row][col];
     int en = arr[nrow][ncol];
+
+
 
     for (int i = 1; i <= 6; i++) {
         if (i == en) {
@@ -44,20 +46,22 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, chessboard bo
         //if not nothing happens and the user can try again although am having issues with updating currow
         if (!r.movement(board)) {
             clkco = 0;
+            return 0;
         }
         //if it can move then the grid will update itself
         else {
             if (wthere == true) {
                 updated_grid(row, col, nrow, ncol, pos);
                 piece_is_taken(en);
+                return 1;
             }
             else if (bthere == true) {
-
+                return 0;
             }
             else {
                 updated_grid(row, col, nrow, ncol, pos);
+                return 1;
             }
-
         }
         break;
     case 2:
@@ -67,20 +71,23 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, chessboard bo
         //white knights movement checker
         if (!n.movement()) {
             clkco = 0;
+            return 0;
         }
 
         //board checking it's not taking its own teammate
         else {
             if (bthere == true) {
+                return 0;
+            }
+            else if (wthere == true) {
                 updated_grid(row, col, nrow, ncol, pos);
                 piece_is_taken(en);
                 std::cout << "haha i have taken";
-            }
-            else if (wthere == true) {
-                std::cout << "cant move there mate";
+                return 1;
             }
             else {
                 updated_grid(row, col, nrow, ncol, pos);
+                return 1;
             }
         }
         break;
@@ -90,20 +97,22 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, chessboard bo
         //if not nothing happens and the user can try again although am having issues with updating currow
         if (!b.movement(board)) {
             clkco = 0;
+            return 0;
         }
         //if it can move then the grid will update itself
         else {
             if (wthere == true) {
                 updated_grid(row, col, nrow, ncol, pos);
                 piece_is_taken(en);
+                return 1;
             }
             else if (bthere == true) {
-
+                return 0;
             }
             else {
                 updated_grid(row, col, nrow, ncol, pos);
+                return 1;
             }
-
         }
         break;
     case 4:
@@ -112,23 +121,23 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, chessboard bo
         //if not nothing happens and the user can try again although am having issues with updating currow
         if (!q.movement(board)) {
             clkco = 0;
+            return 0;
         }
         //if it can move then the grid will update itself
         else {
             if (wthere == true) {
                 updated_grid(row, col, nrow, ncol, pos);
                 piece_is_taken(en);
+                return 1;
             }
             else if (bthere == true) {
-
+                return 0;
             }
             else {
                 updated_grid(row, col, nrow, ncol, pos);
+                return 1;
             }
-
         }
-
-
         break;
         //is queen
     case 5:
@@ -136,22 +145,23 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, chessboard bo
         //if not nothing happens and the user can try again although am having issues with updating currow
         if (!k.movement()) {
             clkco = 0;
+            return 0;
         }
         //if it can move then the grid will update itself
         else {
             if (wthere == true) {
                 updated_grid(row, col, nrow, ncol, pos);
                 piece_is_taken(en);
+                return 1;
             }
             else if (bthere == true) {
-
+                return 0;
             }
             else {
                 updated_grid(row, col, nrow, ncol, pos);
+                return 1;
             }
-
         }
-
         break;
         //is a king
 
@@ -162,46 +172,47 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, chessboard bo
         //if not nothing happens and the user can try again although am having issues with updating currow
         if (!p.movement(pos)) {
             clkco = 0;
+            return 0;
         }
         //if it can move then the grid will update itself
         else {
             if (nrow == row + 1 && wthere == true && (ncol == col + 1 || ncol == col - 1)) {
                 updated_grid(row, col, nrow, ncol, pos);
                 piece_is_taken(en);
+                return 1;
             }
             else if (wthere == true || bthere == true) {
+                return 0;
             }
             else {
                 updated_grid(row, col, nrow, ncol, pos);
+                return 1;
             }
-
         }
-
         break;
     }
     //checking white
     switch (pos) {
     case 7:
-
         p.posassign(row, col, nrow, ncol);
-        p.movement(pos);
         if (!p.movement(pos)) {
             clkco = 0;
+            return 0;
         }
         else {
             //can it be attacking?
             if (nrow == row - 1 && bthere == true && (ncol == col + 1 || ncol == col - 1)) {
                 updated_grid(row, col, nrow, ncol, pos);
                 piece_is_taken(en);
+                return 1;
             }
             else if (wthere == true || bthere == true) {
-
+                return 0;
             }
             else {
                 updated_grid(row, col, nrow, ncol, pos);
+                return 1;
             }
-
-
         }
         //is a pawn
         break;
@@ -211,19 +222,22 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, chessboard bo
         //if not nothing happens and the user can try again although am having issues with updating currow
         if (!r.movement(board)) {
             clkco = 0;
+            return 0;
         }
         //if it can move then the grid will update itself
         else {
             if (bthere == true) {
                 updated_grid(row, col, nrow, ncol, pos);
+                piece_is_taken(en);
+                return 1;
             }
             else if (wthere == true) {
-
+                return 0;
             }
             else {
                 updated_grid(row, col, nrow, ncol, pos);
+                return 1;
             }
-
         }
         break;
     case 9:
@@ -233,6 +247,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, chessboard bo
         //white knights movement checker
         if (!n.movement()) {
             clkco = 0;
+            return 0;
         }
 
         //board checking it's not taking its own teammate
@@ -241,12 +256,15 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, chessboard bo
                 updated_grid(row, col, nrow, ncol, pos);
                 piece_is_taken(en);
                 std::cout << "haha i have taken";
+                return 1;
             }
             else if (wthere == true) {
                 std::cout << "cant move there mate";
+                return 0;
             }
             else {
                 updated_grid(row, col, nrow, ncol, pos);
+                return 1;
             }
         }
         break;
@@ -256,19 +274,22 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, chessboard bo
         //if not nothing happens and the user can try again although am having issues with updating currow
         if (!b.movement(board)) {
             clkco = 0;
+            return 0;
         }
         //if it can move then the grid will update itself
         else {
             if (bthere == true) {
                 updated_grid(row, col, nrow, ncol, pos);
+                piece_is_taken(en);
+                return 1;
             }
             else if (wthere == true) {
-
+                return 0;
             }
             else {
                 updated_grid(row, col, nrow, ncol, pos);
+                return 1;
             }
-
         }
         break;
     case 11:
@@ -277,20 +298,22 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, chessboard bo
         //if not nothing happens and the user can try again although am having issues with updating currow
         if (!q.movement(board)) {
             clkco = 0;
+            return 0;
         }
         //if it can move then the grid will update itself
         else {
             if (bthere == true) {
                 updated_grid(row, col, nrow, ncol, pos);
                 piece_is_taken(en);
+                return 1;
             }
             else if (wthere == true) {
-
+                return 0;
             }
             else {
                 updated_grid(row, col, nrow, ncol, pos);
+                return 1;
             }
-
         }
         break;
     case 12:
@@ -299,23 +322,23 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, chessboard bo
         //if not nothing happens and the user can try again although am having issues with updating currow
         if (!k.movement()) {
             clkco = 0;
+            return 0;
         }
         //if it can move then the grid will update itself
         else {
             if (bthere == true) {
                 updated_grid(row, col, nrow, ncol, pos);
                 piece_is_taken(en);
+                return 1;
             }
             else if (wthere == true) {
-
+                return 0;
             }
             else {
                 updated_grid(row, col, nrow, ncol, pos);
+                return 1;
             }
-
         }
-
-        break;
         break;
     }
 
@@ -326,7 +349,7 @@ int chessboard::updated_grid(int rowold, int colold, int rownew, int colnew, int
     arr[rowold][colold] = 0;
     arr[rownew][colnew] = piecenum;
     clkco = 0;
-    return 0;
+    return 1;
 }
 void chessboard::printBoard() {
     std::cout << "\n    A    B    C    D    E    F    G    H\n  ----------------------------------------\n";
@@ -442,24 +465,326 @@ bool chessboard::is_black_gone() {
     }
 }
 
-bool cantake(chessboard brd,bool bturn, bool wturn) {
+bool chessboard::cantake(chessboard brd, bool wturn, bool bturn) {
+    chessboard test;
     for (int i = 0; i <= 7; i++) {
         for (int j = 0; j <= 7; j++) {
             int pos = brd.arr[i][j];
-            if (wturn == true && pos >= 1 and pos = < 6) {
+            if (bturn == true and pos >= 1 and pos <= 6) {
                 for (int k = 0; k <= 7; k++) {
                     for (int l = 0; l <= 7; l++) {
-                        if(brd.grid_pressed(i,j,k, l, brd, wturn, bturn))
-                       
+                        if (brd.grid_noturn(i, j, k, l, brd) == 1 and brd.arr[k][l] >= 7) {
+                            return true;
+                        }
+                    }
+                }
+            }
+            else if (wturn == true and pos >= 7) {
+                for (int k = 0; k <= 7; k++) {
+                    for (int l = 0; l <= 7; l++) {
 
-
-
-
-
+                        if (brd.grid_noturn(i, j, k, l, brd) == 1 and (brd.arr[k][l] >= 1 and brd.arr[k][l] <= 6)){
+                            return true;
+                        }   
                     }
                 }
             }
         }
     }
+    std::cout << "returned false";
+    return false;
 }
 
+int chessboard::grid_noturn(int row, int col, int nrow, int ncol, chessboard board) {
+    Pawn p;
+    Queen q;
+    King k;
+    Bishop b;
+    Rook r;
+    Knight n;
+    bool wthere = false;
+    bool bthere = false;
+    int pos = arr[row][col];
+    int en = arr[nrow][ncol];
+
+
+
+    for (int i = 1; i <= 6; i++) {
+        if (i == en) {
+            bthere = true;
+        }
+    }
+    for (int i = 7; i <= 12; i++) {
+        if (i == en) {
+            wthere = true;
+        }
+    }
+    //checking black
+    switch (pos) {
+    case 1:
+        //is a rook
+        r.posassign(row, col, nrow, ncol);
+        //if not nothing happens and the user can try again although am having issues with updating currow
+        if (!r.movement(board)) {
+            clkco = 0;
+            return 0;
+        }
+        //if it can move then the grid will update itself
+        else {
+            if (wthere == true) {
+
+                return 1;
+            }
+            else if (bthere == true) {
+                return 0;
+            }
+            else {
+
+                return 1;
+            }
+        }
+        break;
+    case 2:
+        //is a knight
+        n.posassign(row, col, nrow, ncol);
+
+        //white knights movement checker
+        if (!n.movement()) {
+            clkco = 0;
+            return 0;
+        }
+
+        //board checking it's not taking its own teammate
+        else {
+            if (bthere == true) {
+                return 0;
+            }
+            else if (wthere == true) {
+                return 1;
+            }
+            else {
+                return 1;
+            }
+        }
+        break;
+    case 3:
+        //is a bishop
+        b.posassign(row, col, nrow, ncol);
+        //if not nothing happens and the user can try again although am having issues with updating currow
+        if (!b.movement(board)) {
+            clkco = 0;
+            return 0;
+        }
+        //if it can move then the grid will update itself
+        else {
+            if (wthere == true) {
+                return 1;
+            }
+            else if (bthere == true) {
+                return 0;
+            }
+            else {
+                return 1;
+            }
+        }
+        break;
+    case 4:
+        //is a queen
+        q.posassign(row, col, nrow, ncol);
+        //if not nothing happens and the user can try again although am having issues with updating currow
+        if (!q.movement(board)) {
+            clkco = 0;
+            return 0;
+        }
+        //if it can move then the grid will update itself
+        else {
+            if (wthere == true) {
+                return 1;
+            }
+            else if (bthere == true) {
+                return 0;
+            }
+            else {
+                return 1;
+            }
+        }
+        break;
+        //is queen
+    case 5:
+        k.posassign(row, col, nrow, ncol);
+        //if not nothing happens and the user can try again although am having issues with updating currow
+        if (!k.movement()) {
+            clkco = 0;
+            return 0;
+        }
+        //if it can move then the grid will update itself
+        else {
+            if (wthere == true) {
+                return 1;
+            }
+            else if (bthere == true) {
+                return 0;
+            }
+            else {
+                return 1;
+            }
+        }
+        break;
+        //is a king
+
+    case 6:
+        //is a pawn
+        //a good example of how grid asks pawn if it can move to a position
+        p.posassign(row, col, nrow, ncol);
+        //if not nothing happens and the user can try again although am having issues with updating currow
+        if (!p.movement(pos)) {
+            clkco = 0;
+            return 0;
+        }
+        //if it can move then the grid will update itself
+        else {
+            if (nrow == row + 1 && wthere == true && (ncol == col + 1 || ncol == col - 1)) {
+                return 1;
+            }
+            else if (wthere == true || bthere == true) {
+                return 0;
+            }
+            else {
+                return 1;
+            }
+        }
+        break;
+    }
+    //checking white
+    switch (pos) {
+    case 7:
+        p.posassign(row, col, nrow, ncol);
+        if (!p.movement(pos)) {
+            clkco = 0;
+            return 0;
+        }
+        else {
+            //can it be attacking?
+            if (nrow == row - 1 && bthere == true && (ncol == col + 1 || ncol == col - 1)) {
+                return 1;
+            }
+            else if (wthere == true || bthere == true) {
+                return 0;
+            }
+            else {
+                return 1;
+            }
+        }
+        //is a pawn
+        break;
+    case 8:
+        //is a rook
+        r.posassign(row, col, nrow, ncol);
+        //if not nothing happens and the user can try again although am having issues with updating currow
+        if (!r.movement(board)) {
+            clkco = 0;
+            return 0;
+        }
+        //if it can move then the grid will update itself
+        else {
+            if (bthere == true) {
+                return 1;
+            }
+            else if (wthere == true) {
+                return 0;
+            }
+            else {
+                return 1;
+            }
+        }
+        break;
+    case 9:
+        //is a knight
+        n.posassign(row, col, nrow, ncol);
+
+        //white knights movement checker
+        if (!n.movement()) {
+            clkco = 0;
+            return 0;
+        }
+
+        //board checking it's not taking its own teammate
+        else {
+            if (bthere == true) {
+                return 1;
+            }
+            else if (wthere == true) {
+                return 0;
+            }
+            else {
+                return 1;
+            }
+        }
+        break;
+    case 10:
+        //is a bishop
+        b.posassign(row, col, nrow, ncol);
+        //if not nothing happens and the user can try again although am having issues with updating currow
+        if (!b.movement(board)) {
+            clkco = 0;
+            return 0;
+        }
+        //if it can move then the grid will update itself
+        else {
+            if (bthere == true) {
+                return 1;
+            }
+            else if (wthere == true) {
+                return 0;
+            }
+            else {
+                return 1;
+            }
+        }
+        break;
+    case 11:
+        //is a queen
+        q.posassign(row, col, nrow, ncol);
+        //if not nothing happens and the user can try again although am having issues with updating currow
+        if (!q.movement(board)) {
+            clkco = 0;
+            return 0;
+        }
+        //if it can move then the grid will update itself
+        else {
+            if (bthere == true) {
+                return 1;
+            }
+            else if (wthere == true) {
+                return 0;
+            }
+            else {
+                return 1;
+            }
+        }
+        break;
+    case 12:
+        //is a king
+        k.posassign(row, col, nrow, ncol);
+        //if not nothing happens and the user can try again although am having issues with updating currow
+        if (!k.movement()) {
+            clkco = 0;
+            return 0;
+        }
+        //if it can move then the grid will update itself
+        else {
+            if (bthere == true) {
+                return 1;
+            }
+            else if (wthere == true) {
+                return 0;
+            }
+            else {
+                return 1;
+            }
+        }
+        break;
+    }
+
+    return 0;
+}
