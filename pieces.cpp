@@ -268,7 +268,7 @@ void Rook::posassign(int cx, int cy, int nx, int ny)
 
 Bishop::Bishop() {}
 bool Bishop::movement(chessboard brd)
-{  
+{
     for (int i = 0; i <= 7; i++) {
 
         if (currow == wantrow + i && curcol == wantcol + i) {
