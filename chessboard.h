@@ -15,13 +15,14 @@ public:
         {8,9,10,11,12,10,9,8} //top is white (1-6),bottom is black (7-12),no mans land is defined by 0s
     };
 
-    int grid_pressed(int row, int col, int nrow, int ncol, chessboard board,bool wplaying,bool bplaying);
+    int grid_pressed(int row, int col, int nrow, int ncol, chessboard board, bool wplaying, bool bplaying);
     int updated_grid(int rowold, int colold, int rownew, int colnew, int piecenum);
     void printBoard();
     bool is_white_gone();
     bool is_black_gone();
+    bool cantake(chessboard brd, bool bturn, bool wturn);
+    int grid_noturn(int row, int col, int nrow, int ncol, chessboard board);
     void piece_is_taken(int piecenum);
-    bool cantake(chessboard board);
 
 private:
     int wtaken = 16;
