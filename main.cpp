@@ -17,41 +17,54 @@ int main()
     while (!gameover)
     {
         w.printBoard();
-        std::cout << "\n\n\n\n\n\nMove From: ";
-        std::cin >> input;
-        row = input[1] - '1';
-        col = input[0] - 'A';
-        std::cout << "Move To: ";
-        std::cin >> input;
-        std::cout << "\n\n\n\n\n\n";
-        nrow = input[1] - '1';
-        ncol = input[0] - 'A';
-        if (w.grid_pressed(row, col, nrow, ncol,w ,wplaying, bplaying) == 0) {
-            std::cout << "Invalid Move!";
-            invalid_move = true;
+        if (wplaying) {
+            std::cout << "\n\n\n\n\n\nWhite's turn\n";
         }
         else {
-            invalid_move = false;
-        }
-    }
-    //checking if the game is over by elimination
-    if (w.is_black_gone() == true) {
-        std::cout << "Black Wins!";
-        gameover = true;
-    }
-    else if (w.is_white_gone() == true) {
-        std::cout << "White Wins!";
-        gameover = true;
-    }
-    //switching between players
-    if (wplaying == true) {
-        wplaying = false;
-        bplaying = true;
-    }
-    else if (bplaying == true) {
-        wplaying = true;
-        bplaying = false;
-    }
+            std::cout << "\n\n\n\n\n\nBlack's turn\n";
+        };
+        invalid_move = true;
+        
+        while (invalid_move == true) {
 
+            std::cout << "Move From: ";
+            std::cin >> input;
+            row = input[1] - '1';
+            col = input[0] - 'A';
+            std::cout << "Move To: ";
+            std::cin >> input;
+            std::cout << "\n\n\n\n\n\n";
+            nrow = input[1] - '1';
+            ncol = input[0] - 'A';
+            bool takecheck = w.cantake(w,wplaying,bplaying);
+            if ((w.arr[nrow][ncol] == 0 and takecheck == true) or (w.grid_pressed(row, col, nrow, ncol, w, wplaying, bplaying) == 0 )) {
+                std::cout << "Invalid Move!\n";
+                invalid_move = true;
+            }
+            else {
+                invalid_move = false;
+            }
+        }
+        //checking if the game is over by elimination
+        if (w.is_black_gone() == true) {
+            std::cout << "Black Wins!";
+            gameover = true;
+        }
+        else if (w.is_white_gone() == true) {
+            std::cout << "White Wins!";
+            gameover = true;
+        }
+        //switching between players
+        if (wplaying == true) {
+            wplaying = false;
+            bplaying = true;
+        }
+        else if (bplaying == true) {
+            wplaying = true;
+            bplaying = false;
+        }
+
+
+    }
     return 0;
-}
+    }
