@@ -1,8 +1,181 @@
 #include "pieces.h"
 #include <iostream>
 
+std::pair<int, int> Piece::get_pos() {
+    return cur_pos;
+}
 
-Pawn::Pawn() {};
+void Piece::set_pos(int x, int y) {
+    cur_pos.first = x;
+    cur_pos.second = y;
+}
+
+PieceType Piece::get_type() {
+    return type;
+}
+
+PieceColor Piece::get_colour() {
+    return colour;
+}
+
+bool Pawn::check_movement(int x, int y) {
+    if (cur_pos.first == x && cur_pos.second == y + 1) {
+        return true;
+    }
+    else if (cur_pos.first == x && cur_pos.second == y - 1) {
+        return true;
+    }
+    else if (cur_pos.first == x + 1 && cur_pos.second == y) {
+        return true;
+    }
+    else if (cur_pos.first == x - 1 && cur_pos.second == y) {
+        return true;
+    }
+    else if (cur_pos.first == x + 1 && cur_pos.second == y + 1) {
+        return true;
+    }
+    else if (cur_pos.first == x + 1 && cur_pos.second == y - 1) {
+        return true;
+    }
+    else if (cur_pos.first == x - 1 && cur_pos.second == y + 1) {
+        return true;
+    }
+    else if (cur_pos.first == x - 1 && cur_pos.second == y - 1) {
+        return true;
+    }
+    else {
+        return false;
+    }
+
+}
+
+bool Rook::check_movement(int x, int y) {
+    if (cur_pos.first == x && cur_pos.second == y + 1) {
+        return true;
+    }
+    else if (cur_pos.first == x && cur_pos.second == y - 1) {
+        return true;
+    }
+    else if (cur_pos.first == x + 1 && cur_pos.second == y) {
+        return true;
+    }
+    else if (cur_pos.first == x - 1 && cur_pos.second == y) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool Knight::check_movement(int x, int y) {
+    if (cur_pos.first == x + 2 && cur_pos.second == y + 1) {
+        return true;
+    }
+    else if (cur_pos.first == x + 2 && cur_pos.second == y - 1) {
+        return true;
+    }
+    else if (cur_pos.first == x - 2 && cur_pos.second == y + 1) {
+        return true;
+    }
+    else if (cur_pos.first == x - 2 && cur_pos.second == y - 1) {
+        return true;
+    }
+    else if (cur_pos.first == x + 1 && cur_pos.second == y + 2) {
+        return true;
+    }
+    else if (cur_pos.first == x + 1 && cur_pos.second == y - 2) {
+        return true;
+    }
+    else if (cur_pos.first == x - 1 && cur_pos.second == y + 2) {
+        return true;
+    }
+    else if (cur_pos.first == x - 1 && cur_pos.second == y - 2) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool Queen::check_movement(int x, int y) {
+    if (cur_pos.first == x && cur_pos.second == y + 1) {
+        return true;
+    }
+    else if (cur_pos.first == x && cur_pos.second == y - 1) {
+        return true;
+    }
+    else if (cur_pos.first == x + 1 && cur_pos.second == y) {
+        return true;
+    }
+    else if (cur_pos.first == x - 1 && cur_pos.second == y) {
+        return true;
+    }
+    else if (cur_pos.first == x + 1 && cur_pos.second == y + 1) {
+        return true;
+    }
+    else if (cur_pos.first == x + 1 && cur_pos.second == y - 1) {
+        return true;
+    }
+    else if (cur_pos.first == x - 1 && cur_pos.second == y + 1) {
+        return true;
+    }
+    else if (cur_pos.first == x - 1 && cur_pos.second == y - 1) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool Bishop::check_movement(int x, int y) {
+    if (cur_pos.first == x + 1 && cur_pos.second == y + 1) {
+        return true;
+    }
+    else if (cur_pos.first == x + 1 && cur_pos.second == y - 1) {
+        return true;
+    }
+    else if (cur_pos.first == x - 1 && cur_pos.second == y + 1) {
+        return true;
+    }
+    else if (cur_pos.first == x - 1 && cur_pos.second == y - 1) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool King::check_movement(int x, int y) {
+    if (cur_pos.first == x && cur_pos.second == y + 1) {
+        return true;
+    }
+    else if (cur_pos.first == x && cur_pos.second == y - 1) {
+        return true;
+    }
+    else if (cur_pos.first == x + 1 && cur_pos.second == y) {
+        return true;
+    }
+    else if (cur_pos.first == x - 1 && cur_pos.second == y) {
+        return true;
+    }
+    else if (cur_pos.first == x + 1 && cur_pos.second == y + 1) {
+        return true;
+    }
+    else if (cur_pos.first == x + 1 && cur_pos.second == y - 1) {
+        return true;
+    }
+    else if (cur_pos.first == x - 1 && cur_pos.second == y + 1) {
+        return true;
+    }
+    else if (cur_pos.first == x - 1 && cur_pos.second == y - 1) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+/*Pawn::Pawn() {};
 //assigning values based on the pawns possition
 void Pawn::posassign(int cx, int cy, int nx, int ny) {
     currow = cx;
@@ -23,7 +196,7 @@ bool Pawn::movement(int piecenum) {
                 return true;
             }
             else {
-                
+
                 return false;
             }
         }
@@ -32,7 +205,7 @@ bool Pawn::movement(int piecenum) {
                 return true;
             }
             else {
-                
+
                 return false;
             }
         }
@@ -45,7 +218,7 @@ bool Pawn::movement(int piecenum) {
                 return true;
             }
             else {
-                
+
                 return false;
             }
         }
@@ -54,7 +227,7 @@ bool Pawn::movement(int piecenum) {
                 return true;
             }
             else {
-               
+
                 return false;
             }
         }
@@ -63,7 +236,14 @@ bool Pawn::movement(int piecenum) {
     return true;
 }
 
-
+bool Pawn::row(int row) {
+    if (row == 0 || row == 7) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
 
 
 King::King() {};
@@ -105,39 +285,90 @@ void King::posassign(int cx, int cy, int nx, int ny) {
 }
 
 
-
 Queen::Queen() {};
 
-bool Queen::movement()
+bool Queen::movement(chessboard brd)
 {
     for (int i = 0; i <= 7; i++) {
+        //left
         if (currow == wantrow && curcol == wantcol + i) {
+            for (int j = 1; j < i; j++) {
+                int pos = brd.arr[currow][curcol - j];
+                if (pos > 0) {
+                    return false;
+                }
+            }
             return true;
         }
+        // right
         else if (currow == wantrow && curcol == wantcol - i) {
+            for (int j = 1; j < i; j++) {
+                int pos = brd.arr[currow][curcol + j];
+                if (pos > 0) {
+                    return false;
+                }
+            }
             return true;
         }
+        //up
         else if (currow == wantrow + i && curcol == wantcol) {
+            for (int j = 1; j < i; j++) {
+                int pos = brd.arr[currow - j][curcol];
+                if (pos > 0) {
+                    return false;
+                }
+            }
             return true;
         }
+        //down
         else if (currow == wantrow - i && curcol == wantcol) {
+            for (int j = 1; j < i; j++) {
+                int pos = brd.arr[currow + j][curcol];
+                if (pos > 0) {
+                    return false;
+                }
+            }
             return true;
         }
         else if (currow == wantrow + i && curcol == wantcol + i) {
+            for (int j = 1; j < i; j++) {
+                int pos = brd.arr[currow - j][curcol - j];
+                if (pos > 0) {
+                    return false;
+                }
+            }
             return true;
         }
         else if (currow == wantrow + i && curcol == wantcol - i) {
+            for (int j = 1; j < i; j++) {
+                int pos = brd.arr[currow - j][curcol + j];
+                if (pos > 0) {
+                    return false;
+                }
+            }
             return true;
         }
         else if (currow == wantrow - i && curcol == wantcol + i) {
+            for (int j = 1; j < i; j++) {
+                int pos = brd.arr[currow + j][curcol - j];
+                if (pos > 0) {
+                    return false;
+                }
+            }
             return true;
         }
         else if (currow == wantrow - i && curcol == wantcol - i) {
+            for (int j = 1; j < i; j++) {
+                int pos = brd.arr[currow + j][curcol + j];
+                if (pos > 0) {
+                    return false;
+                }
+            }
             return true;
         }
 
     }
-        return false;
+    return false;
 
 
 }
@@ -157,24 +388,51 @@ void Queen::posassign(int cx, int cy, int nx, int ny)
 Rook::Rook() {}
 
 
-bool Rook::movement()
+bool Rook::movement(chessboard brd)
 {
-    for (int i = 0; i <= 7; i++) {
+    for (int i = 1; i <= 7; i++) {
+        //left
         if (currow == wantrow && curcol == wantcol + i) {
+            for (int j = 1; j < i; j++) {
+                int pos = brd.arr[currow][curcol - j];
+                if (pos > 0) {
+                    return false;
+                }
+            }
             return true;
         }
+        // right
         else if (currow == wantrow && curcol == wantcol - i) {
+            for (int j = 1; j < i; j++) {
+                int pos = brd.arr[currow][curcol + j];
+                if (pos > 0) {
+                    return false;
+                }
+            }
             return true;
         }
+        //up
         else if (currow == wantrow + i && curcol == wantcol) {
+            for (int j = 1; j < i; j++) {
+                int pos = brd.arr[currow - j][curcol];
+                if (pos > 0) {
+                    return false;
+                }
+            }
             return true;
         }
+        //down
         else if (currow == wantrow - i && curcol == wantcol) {
+            for (int j = 1; j < i; j++) {
+                int pos = brd.arr[currow + j][curcol];
+                if (pos > 0) {
+                    return false;
+                }
+            }
             return true;
         }
     }
     return false;
-
 }
 
 
@@ -188,19 +446,44 @@ void Rook::posassign(int cx, int cy, int nx, int ny)
 };
 
 Bishop::Bishop() {}
-bool Bishop::movement()
+bool Bishop::movement(chessboard brd)
 {
     for (int i = 0; i <= 7; i++) {
+
         if (currow == wantrow + i && curcol == wantcol + i) {
+            for (int j = 1; j < i; j++) {
+                int pos = brd.arr[currow - j][curcol - j];
+                if (pos > 0) {
+                    return false;
+                }
+            }
             return true;
         }
         else if (currow == wantrow + i && curcol == wantcol - i) {
+            for (int j = 1; j < i; j++) {
+                int pos = brd.arr[currow - j][curcol + j];
+                if (pos > 0) {
+                    return false;
+                }
+            }
             return true;
         }
         else if (currow == wantrow - i && curcol == wantcol + i) {
+            for (int j = 1; j < i; j++) {
+                int pos = brd.arr[currow + j][curcol - j];
+                if (pos > 0) {
+                    return false;
+                }
+            }
             return true;
         }
         else if (currow == wantrow - i && curcol == wantcol - i) {
+            for (int j = 1; j < i; j++) {
+                int pos = brd.arr[currow + j][curcol + j];
+                if (pos > 0) {
+                    return false;
+                }
+            }
             return true;
         }
     }
@@ -214,3 +497,44 @@ void Bishop::posassign(int cx, int cy, int nx, int ny)
     wantrow = nx;
     wantcol = ny;
 }
+
+
+Knight::Knight() {
+}
+void Knight::posassign(int cx, int cy, int nx, int ny) {
+    currow = cx;
+    curcol = cy;
+    wantrow = nx;
+    wantcol = ny;
+}
+
+bool Knight::movement() {
+    if (wantrow == currow + 2 && wantcol == curcol + 1) {
+        return true;
+    }
+    else if (wantrow == currow + 2 && wantcol == curcol - 1) {
+        return true;
+    }
+    else if (wantrow == currow - 2 && wantcol == curcol + 1) {
+        return true;
+    }
+    else if (wantrow == currow - 2 && wantcol == curcol - 1) {
+        return true;
+    }
+    else if (wantrow == currow + 1 && wantcol == curcol + 2) {
+        return true;
+    }
+    else if (wantrow == currow + 1 && wantcol == curcol - 2) {
+        return true;
+    }
+    else if (wantrow == currow - 1 && wantcol == curcol + 2) {
+        return true;
+    }
+    else if (wantrow == currow - 1 && wantcol == curcol - 2) {
+        return true;
+    }
+    else {
+        return false;
+    }
+
+}*/
