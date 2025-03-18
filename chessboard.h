@@ -44,9 +44,15 @@ Piece* arr[8][8] = {
     void printBoard();
     bool is_white_gone();
     bool is_black_gone();
+
     bool piece_is_taken(PieceType type = NONE, PieceColor colour = NONE_COLOR,Tile_color tile= NONE_TILE);
     bool cantake(chessboard brd, bool bturn, bool wturn);
     int grid_noturn(int row, int col, int nrow, int ncol, chessboard board);
+
+
+    //a function to print the board
+    void printBoard();
+    bool cantake(chessboard board);
 
 private:
     int wtaken = 16;
