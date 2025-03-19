@@ -5,6 +5,7 @@
 class chessboard
 {
 public:
+
     Piece* arr[8][8] = {
         {new Rook(0,0, PieceColor::BLACK), new Knight(0,1, PieceColor::BLACK), new Bishop(0,2, PieceColor::BLACK),
          new Queen(0,3, PieceColor::BLACK), new King(0,4, PieceColor::BLACK), new Bishop(0,5, PieceColor::BLACK),
@@ -47,10 +48,11 @@ public:
     int cantake(bool wplaying, bool bplaying);
 
     bool piece_is_taken(PieceType type = NONE, PieceColor colour = NONE_COLOR, Tile_color tile = NONE_TILE);
-   // bool cantake(chessboard brd, bool bturn, bool wturn);
+
 
 
     //a function to print the board
+
 
 private:
     int wtaken = 16;
