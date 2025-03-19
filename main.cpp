@@ -35,8 +35,8 @@ int main()
             std::cout << "\n\n\n\n\n\n";
             nrow = input[1] - '1';
             ncol = input[0] - 'A';
-            //bool takecheck = w.cantake(w,wplaying,bplaying);
-            if (/*(w.arr[nrow][ncol] == 0 and takecheck == true) or*/ (w.grid_pressed(row, col, nrow, ncol, wplaying, bplaying) == 0)) {
+            int takecheck = w.cantake(wplaying,bplaying);
+            if ((w.arr[nrow][ncol] == 0 and takecheck == 1) or (w.grid_pressed(row, col, nrow, ncol, wplaying, bplaying) == 0)) {
                 std::cout << "Invalid Move!";
                 invalid_move = true;
                 std::cout << "to here1";
@@ -55,7 +55,7 @@ int main()
                     std::cout << "to here 3";
                 }
             }
-            
+
             //checking if the game is over by elimination
             if (w.is_black_gone() == true) {
                 std::cout << "Black Wins!";
