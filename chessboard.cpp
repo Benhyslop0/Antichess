@@ -624,15 +624,13 @@ bool chessboard::is_black_gone() {
 int chessboard::cantake(bool wplaying, bool bplaying) {
     std::vector<Piece*> wpieces;
     std::vector<Piece*> bpieces;
-
-
     for (int i = 0; i < 7; i++) {
         for (int j = 0; j < 7; j++) {
             if (this->arr[i][j] != nullptr) {
                 if (this->arr[i][j]->get_colour() == WHITE) {
                     wpieces.push_back(this->arr[i][j]);
                 }
-                else if (this->arr[i][j]->get_colour() == BLACK) {
+                if (this->arr[i][j]->get_colour() == BLACK) {
                     bpieces.push_back(this->arr[i][j]);
                 };
             }
@@ -655,39 +653,35 @@ int chessboard::cantake(bool wplaying, bool bplaying) {
                     if (boardAwarePiece->check_movement(bx, by, this)) {
                         return 1;
                     }
-            }
-        }
-    }
-
-        if (bplaying && !bpieces.empty() && !wpieces.empty()) {
-            for (int i = 0; i < bpieces.size(); i++) {
-                for (int j = 0; j < wpieces.size(); j++) {
-                    std::cout << "inside double loop";
-                    int wx, wy;
-                    std::tie(wx, wy) = wpieces[j]->get_pos();
-                    std::cout << "i got pos";
-                    PieceType type = bpieces.at(i)->get_type();
-                    if (type == PAWN) {
-                        return 0;
-                    }
-                    if (type == KING or type == KNIGHT) {
-                        if (bpieces.at(i)->check_movement(wx, wy)) {
-                            return 1;
-                        }
-                    }
-                    if (type == QUEEN or type == BISHOP or type == ROOK) {
-                        BoardAware* boardAwarePiece = dynamic_cast<BoardAware*>(bpieces.at(i));
-                        if (boardAwarePiece->check_movement(wx, wy, this)) {
-                            return 1;
-                        }
-                        std::cout << "i couldnt loop again";
-                    }
                 }
             }
         }
     }
-    std::cout << "its black i got it";
 
-    return 0;
+    if (bplaying and !bpieces.empty() and !wpieces.empty()) {
+        std::cout << "i know blacks playing";
+        for (int i = 0; i < bpieces.size(); i++) {
+            for (int j = 0; j < wpieces.size(); j++) {
+                int wx, wy;
+                std::tie(wx, wy) = wpieces[j]->get_pos();
+                PieceType type = bpieces.at(i)->get_type();
+                if (type == KING or type == KNIGHT) {
+                    if (bpieces.at(i)->check_movement(wx, wy)) {
+                        return 1;
+                    }
+                }
+                if (type == QUEEN or type == BISHOP or type == ROOK or type == PAWN) {
+                    BoardAware* boardAwarePiece = dynamic_cast<BoardAware*>(bpieces.at(i));
+                    if (boardAwarePiece->check_movement(wx, wy, this)) {
+                        std::cout << "inbside if";
+                        return 1;
+                    }
+                  
+                }
+            }
+        }
+    }
+        return 0;
 }
+
 
