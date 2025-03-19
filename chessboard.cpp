@@ -2,26 +2,30 @@
 #include <iostream>
 #include <stdio.h>
 #include <vector>
-#include<tuple>
+#include <tuple>
 
 
 
 //checking for what piece has been clicked
 
 int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying, bool bplaying) {
-
+    std::cout << "in gridpressed";
     Piece* piece = arr[row][col];
+    if (piece == nullptr) {
+        return 0;
+    }
     PieceColor colour = piece->get_colour();
     PieceType pos = piece->get_type();
-    Piece* piece2 = arr[nrow][ncol];
-    PieceColor colour2 = NONE_COLOR;
-    if (piece2 != nullptr) {
 
+    Piece* piece2 = arr[nrow][ncol];
+    PieceColor colour2;
+    if (piece2 == nullptr) {
+        colour2 = PieceColor::NONE_COLOR;
+    }
+    else {
         colour2 = piece2->get_colour();
     }
 
-    std::cout << colour2;
-    std::cout << colour;
     if (wplaying == true && colour == BLACK) {
         std::cout << "Not your piece!";
         return 0;
@@ -31,15 +35,17 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
         return 0;
     }
 
-
+    BoardAware* boardAwarePiece = nullptr; // need to make here so its in the scope of the switch statement
     //checking black
     if (colour == BLACK) {
         switch (pos) {
 
         case ROOK:
-            //is a rook
-            //if not nothing happens and the user can try again although am having issues with updating currow
-            if (!piece->check_movement(row, col)) {
+
+
+            //doing this cause inheritance is a pain
+            boardAwarePiece = dynamic_cast<BoardAware*>(piece);
+            if (!boardAwarePiece->check_movement(nrow, ncol, this)) {
                 clkco = 0;
                 return 0;
             }
@@ -63,9 +69,8 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
         case KNIGHT:
             //is a knight
             //white knights movement checker
-            if (!piece->check_movement(row, col)) {
+            if (!piece->check_movement(nrow, ncol)) {
                 clkco = 0;
-                return 0;
             }
 
             //board checking it's not taking its own teammate
@@ -89,7 +94,8 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
         case BISHOP:
             //is a bishop
             //if not nothing happens and the user can try again although am having issues with updating currow
-            if (!piece->check_movement(row, col)) {
+            boardAwarePiece = dynamic_cast<BoardAware*>(piece);
+            if (!boardAwarePiece->check_movement(nrow, ncol, this)) {
                 clkco = 0;
                 return 0;
             }
@@ -116,7 +122,8 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
             //is a queen
 
             //if not nothing happens and the user can try again although am having issues with updating currow
-            if (!piece->check_movement(row, col)) {
+            boardAwarePiece = dynamic_cast<BoardAware*>(piece);
+            if (!boardAwarePiece->check_movement(nrow, ncol, this)) {
                 clkco = 0;
                 return 0;
             }
@@ -141,7 +148,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
 
         case KING:
             //if not nothing happens and the user can try again although am having issues with updating currow
-            if (!piece->check_movement(row, col)) {
+            if (!piece->check_movement(nrow, ncol)) {
                 clkco = 0;
                 return 0;
             }
@@ -167,9 +174,11 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
 
 
         case PAWN:
+            std::cout << "its a pawn";
             //is a pawn
             //a good example of how grid asks pawn if it can move to a position
-            if (!piece->check_movement(row, col)) {
+            boardAwarePiece = dynamic_cast<BoardAware*>(piece);
+            if (!boardAwarePiece->check_movement(nrow, ncol, this)) {
                 clkco = 0;
                 return 0;
             }
@@ -219,7 +228,9 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
                     }
                 }
                 updated_grid(row, col, nrow, ncol, piece, pos);
+                return 1;
             }
+            return 0;
             break;
         }
     }
@@ -227,15 +238,18 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
 
         //checking white
         switch (pos) {
+
         case PAWN:
-            if (!piece->check_movement(row, col)) {
+            boardAwarePiece = dynamic_cast<BoardAware*>(piece);
+            if (!boardAwarePiece->check_movement(nrow, ncol, this)) {
+
                 clkco = 0;
                 return 0;
             }
             else {
                 //can it be attacking?
                 if (nrow == row - 1 && colour2 == BLACK && (ncol == col + 1 || ncol == col - 1)) {
-                    if (nrow == 7) {  // Check if pawn has reached the last row
+                    if (nrow == 0) {  // Check if pawn has reached the last row
                         bool invalid = true;
                         int choice;  // Take input as an integer
 
@@ -252,18 +266,19 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
                             }
                         }
                     }
+
                     updated_grid(row, col, nrow, ncol, piece, pos);
                     piece_is_taken(piece2->get_type());
                     return 1;
 
                 }
-                else if (colour == WHITE || colour2 == BLACK) {
+                else if (colour2 == WHITE || colour2 == BLACK) {
                     std::cout << "cant move there mate";
                     return 0;
 
                 }
                 else {
-                    if (nrow == 7) {  // Check if pawn has reached the last row
+                    if (nrow == 0) {  // Check if pawn has reached the last row
                         bool invalid = true;
                         int choice;  // Take input as an integer
 
@@ -291,7 +306,8 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
         case ROOK:
             //is a rook
             //if not nothing happens and the user can try again although am having issues with updating currow
-            if (!piece->check_movement(row, col)) {
+            boardAwarePiece = dynamic_cast<BoardAware*>(piece);
+            if (!boardAwarePiece->check_movement(nrow, ncol, this)) {
                 clkco = 0;
                 return 0;
             }
@@ -317,7 +333,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
             //is a knight
 
             //white knights movement checker
-            if (!piece->check_movement(row, col)) {
+            if (!piece->check_movement(nrow, ncol)) {
                 clkco = 0;
                 return 0;
             }
@@ -337,14 +353,14 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
                 else {
                     updated_grid(row, col, nrow, ncol, piece, pos);
                     return 1;
-
                 }
             }
             break;
         case BISHOP:
             //is a bishop
             //if not nothing happens and the user can try again although am having issues with updating currow
-            if (!piece->check_movement(row, col)) {
+            boardAwarePiece = dynamic_cast<BoardAware*>(piece);
+            if (!boardAwarePiece->check_movement(nrow, ncol, this)) {
                 clkco = 0;
                 return 0;
             }
@@ -369,7 +385,8 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
         case QUEEN:
             //is a queen
             //if not nothing happens and the user can try again although am having issues with updating currow
-            if (!piece->check_movement(row, col)) {
+            boardAwarePiece = dynamic_cast<BoardAware*>(piece);
+            if (!boardAwarePiece->check_movement(nrow, ncol, this)) {
                 clkco = 0;
                 return 0;
             }
@@ -394,7 +411,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
         case KING:
             //is a king
             //if not nothing happens and the user can try again although am having issues with updating currow
-            if (!piece->check_movement(row, col)) {
+            if (!piece->check_movement(nrow, ncol)) {
                 clkco = 0;
                 return 0;
             }
@@ -412,7 +429,6 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
                 else {
                     updated_grid(row, col, nrow, ncol, piece, pos);
                     return 1;
-
                 }
             }
 
@@ -422,26 +438,28 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
     return 1;
 }
 int chessboard::updated_grid(int rowold, int colold, int rownew, int colnew, Piece* piece, PieceType type) {
+    PieceColor pieceColor = piece->get_colour();
     delete arr[rowold][colold];
     arr[rowold][colold] = nullptr;
+    delete arr[rownew][colnew];
     switch (type) {
     case PAWN:
-        arr[rownew][colnew] = new Pawn(rownew, colnew, piece->get_colour());
+        arr[rownew][colnew] = new Pawn(rownew, colnew, pieceColor);
         break;
     case ROOK:
-        arr[rownew][colnew] = new Rook(rownew, colnew, piece->get_colour());
+        arr[rownew][colnew] = new Rook(rownew, colnew, pieceColor);
         break;
     case KNIGHT:
-        arr[rownew][colnew] = new Knight(rownew, colnew, piece->get_colour());
+        arr[rownew][colnew] = new Knight(rownew, colnew, pieceColor);
         break;
     case QUEEN:
-        arr[rownew][colnew] = new Queen(rownew, colnew, piece->get_colour());
+        arr[rownew][colnew] = new Queen(rownew, colnew, pieceColor);
         break;
     case BISHOP:
-        arr[rownew][colnew] = new Bishop(rownew, colnew, piece->get_colour());
+        arr[rownew][colnew] = new Bishop(rownew, colnew, pieceColor);
         break;
     case KING:
-        arr[rownew][colnew] = new King(rownew, colnew, piece->get_colour());
+        arr[rownew][colnew] = new King(rownew, colnew, pieceColor);
         break;
     }
     clkco = 0;
@@ -603,46 +621,73 @@ bool chessboard::is_black_gone() {
     }
 }
 
-
 int chessboard::cantake(bool wplaying, bool bplaying) {
     std::vector<Piece*> wpieces;
     std::vector<Piece*> bpieces;
-    for (int i = 0; i <= 15; i++) {
-        for (int j = 0; j <= 15; j++) {
+
+
+    for (int i = 0; i < 7; i++) {
+        for (int j = 0; j < 7; j++) {
             if (this->arr[i][j] != nullptr) {
                 if (this->arr[i][j]->get_colour() == WHITE) {
                     wpieces.push_back(this->arr[i][j]);
                 }
                 else if (this->arr[i][j]->get_colour() == BLACK) {
                     bpieces.push_back(this->arr[i][j]);
-                }
+                };
             }
-
         }
     }
-    if (wplaying) {
-        for (int i = 0; i <= wpieces.size(); i++) {
-            for (int j = 0; j <=bpieces.size() ; j++) {
+
+    if (wplaying and !wpieces.empty() and !bpieces.empty()) {
+        for (int i = 0; i < wpieces.size(); i++) {
+            for (int j = 0; j < bpieces.size(); j++) {
                 int bx, by;
-                std::tie(bx, by) = bpieces.at(j)->get_pos();
-                if (wpieces.at(i)->check_movement(bx, by)) {
-                    return 0;
+                std::tie(bx, by) = bpieces[j]->get_pos();
+                PieceType type = wpieces.at(i)->get_type();
+                if (type == KING or type == KNIGHT) {
+                    if (wpieces.at(i)->check_movement(bx, by)) {
+                        return 1;
+                    }
                 }
+                if (type == QUEEN or type == BISHOP or type == ROOK or type == PAWN) {
+                    BoardAware* boardAwarePiece = dynamic_cast<BoardAware*>(wpieces.at(i));
+                    if (boardAwarePiece->check_movement(bx, by, this)) {
+                        return 1;
+                    }
             }
         }
     }
-    if (bplaying) {
-        for (int i = 0; i <= bpieces.size(); i++) {
-            for (int j = 0; j <= wpieces.size(); j++) {
-                int wx, wy;
-                 std::tie(wx,wy)= wpieces.at(j)->get_pos();
-                 if (bpieces.at(i)->check_movement(wx, wy)) {
-                     return 0;
-                }
-            }
 
+        if (bplaying && !bpieces.empty() && !wpieces.empty()) {
+            for (int i = 0; i < bpieces.size(); i++) {
+                for (int j = 0; j < wpieces.size(); j++) {
+                    std::cout << "inside double loop";
+                    int wx, wy;
+                    std::tie(wx, wy) = wpieces[j]->get_pos();
+                    std::cout << "i got pos";
+                    PieceType type = bpieces.at(i)->get_type();
+                    if (type == PAWN) {
+                        return 0;
+                    }
+                    if (type == KING or type == KNIGHT) {
+                        if (bpieces.at(i)->check_movement(wx, wy)) {
+                            return 1;
+                        }
+                    }
+                    if (type == QUEEN or type == BISHOP or type == ROOK) {
+                        BoardAware* boardAwarePiece = dynamic_cast<BoardAware*>(bpieces.at(i));
+                        if (boardAwarePiece->check_movement(wx, wy, this)) {
+                            return 1;
+                        }
+                        std::cout << "i couldnt loop again";
+                    }
+                }
+            }
         }
-        
     }
-    return 1;
+    std::cout << "its black i got it";
+
+    return 0;
 }
+
