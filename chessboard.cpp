@@ -2,13 +2,14 @@
 #include <iostream>
 #include <stdio.h>
 #include <vector>
+#include<tuple>
 
 
 
 //checking for what piece has been clicked
 
 int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying, bool bplaying) {
-    
+
     Piece* piece = arr[row][col];
     PieceColor colour = piece->get_colour();
     PieceType pos = piece->get_type();
@@ -18,7 +19,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
 
         colour2 = piece2->get_colour();
     }
-  
+
     std::cout << colour2;
     std::cout << colour;
     if (wplaying == true && colour == BLACK) {
@@ -30,7 +31,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
         return 0;
     }
 
-    
+
     //checking black
     if (colour == BLACK) {
         switch (pos) {
@@ -609,7 +610,7 @@ int chessboard::cantake(bool wplaying, bool bplaying) {
     for (int i = 0; i <= 15; i++) {
         for (int j = 0; j <= 15; j++) {
             if (this->arr[i][j] != nullptr) {
-                if (this->arr[i][j]->get_colour()==WHITE) {
+                if (this->arr[i][j]->get_colour() == WHITE) {
                     wpieces.push_back(this->arr[i][j]);
                 }
                 else if (this->arr[i][j]->get_colour() == BLACK) {
@@ -619,21 +620,29 @@ int chessboard::cantake(bool wplaying, bool bplaying) {
 
         }
     }
-    
     if (wplaying) {
-        for (int i = 0; i <=wplaying.length() ; i++) {
-            for (int j = 0; j <= ; j++) {
-
+        for (int i = 0; i <= wpieces.size(); i++) {
+            for (int j = 0; j <=bpieces.size() ; j++) {
+                int bx, by;
+                std::tie(bx, by) = bpieces.at(j)->get_pos();
+                if (wpieces.at(i)->check_movement(bx, by)) {
+                    return 0;
+                }
             }
         }
     }
     if (bplaying) {
-        for (int i = 0; i <= 15; i++) {
-            for (int j = 0; j <= 15; j++) {
-
+        for (int i = 0; i <= bpieces.size(); i++) {
+            for (int j = 0; j <= wpieces.size(); j++) {
+                int wx, wy;
+                 std::tie(wx,wy)= wpieces.at(j)->get_pos();
+                 if (bpieces.at(i)->check_movement(wx, wy)) {
+                     return 0;
+                }
             }
 
         }
+        
     }
-
+    return 1;
 }
