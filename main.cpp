@@ -35,27 +35,38 @@ int main()
             std::cout << "\n\n\n\n\n\n";
             nrow = input[1] - '1';
             ncol = input[0] - 'A';
-            int takecheck = w.cantake(wplaying,bplaying);
-            if ((w.arr[nrow][ncol] == 0 and takecheck == 1) or (w.grid_pressed(row, col, nrow, ncol, wplaying, bplaying) == 0)) {
+            std::cout << "Before cantake check" << std::endl;
+            int takecheck = w.cantake(wplaying, bplaying);
+            std::cout << "After cantake check: " << takecheck << std::endl;
+
+            bool mustcapture = (takecheck == 1); // If 1 means captures are available
+
+            // Check if this move is a capture when captures are available
+            bool iscapturing = (w.arr[nrow][ncol] != nullptr &&
+                ((wplaying && w.arr[nrow][ncol]->get_colour() == BLACK) ||
+                    (bplaying && w.arr[nrow][ncol]->get_colour() == WHITE)));
+
+            if (mustcapture && !iscapturing) {
+                std::cout << "Capture is available! You must capture when possible.";
+                invalid_move = true;
+            }
+            else if (w.grid_pressed(row, col, nrow, ncol, wplaying, bplaying) == 0) {
                 std::cout << "Invalid Move!";
                 invalid_move = true;
-                std::cout << "to here1";
             }
             else {
+
                 invalid_move = false;
                 //switching between players
                 if (wplaying == true) {
                     wplaying = false;
                     bplaying = true;
-                    std::cout << "to here 2";
                 }
                 else if (bplaying == true) {
                     wplaying = true;
                     bplaying = false;
-                    std::cout << "to here 3";
                 }
             }
-
             //checking if the game is over by elimination
             if (w.is_black_gone() == true) {
                 std::cout << "Black Wins!";
@@ -71,6 +82,7 @@ int main()
                 gameover = true;
             }
         }
+
 
 
     }
