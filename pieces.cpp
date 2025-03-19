@@ -30,8 +30,7 @@ bool Pawn::check_movement(int x, int y, chessboard* brd) {
                 return true;
             }
         }       
-        else if (x == cur_pos.first - 1 &&
-            (y == cur_pos.second - 1 || y == cur_pos.second + 1)) {
+        else if (x == cur_pos.first - 1 && (y == cur_pos.second - 1 || y == cur_pos.second + 1)) {
             if (brd->arr[x][y] != nullptr && brd->arr[x][y]->get_colour() == BLACK) {
                 return true;
             }
@@ -46,9 +45,8 @@ bool Pawn::check_movement(int x, int y, chessboard* brd) {
                 return true;
             }
         }
-        else if (x == cur_pos.first - 1 &&
-            (y == cur_pos.second + 1 || y == cur_pos.second - 1)) {
-            if (brd->arr[x][y] != nullptr && brd->arr[x][y]->get_colour() == BLACK) {
+        else if (x == cur_pos.first + 1 && (y == cur_pos.second + 1 || y == cur_pos.second - 1)) {
+            if (brd->arr[x][y] != nullptr && brd->arr[x][y]->get_colour() == WHITE) {
                 return true;
             }
         }
@@ -293,4 +291,3 @@ bool King::check_movement(int wantrow, int wantcol) {
         return false;
     }
 }
-
