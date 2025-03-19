@@ -51,7 +51,7 @@ Piece* arr[8][8] = {
 
 
     //a function to print the board
-    void printBoard();
+    
     bool cantake(chessboard board);
 
 private:

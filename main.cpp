@@ -35,12 +35,14 @@ int main()
             std::cout << "\n\n\n\n\n\n";
             nrow = input[1] - '1';
             ncol = input[0] - 'A';
+            
             //bool takecheck = w.cantake(w,wplaying,bplaying);
             if (/*(w.arr[nrow][ncol] == 0 and takecheck == true) or*/ (w.grid_pressed(row, col, nrow, ncol, wplaying, bplaying) == 0 )) {
                 std::cout << "Invalid Move!";
                 invalid_move = true;
             }
             else {
+                
                 invalid_move = false;
                 //switching between players
                 if (wplaying == true) {
@@ -68,6 +70,7 @@ int main()
         }
     }
    
+    
     
 } 
 
