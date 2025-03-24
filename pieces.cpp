@@ -56,50 +56,55 @@ bool Pawn::check_movement(int x, int y, chessboard* brd) {
 
 bool Rook::check_movement(int wantrow, int wantcol, chessboard* brd) {
     std::cout << "in ROOK check move";
-    for (int i = 1; i <= 7; i++) {
-        //left
-        if (cur_pos.first == wantrow && cur_pos.second == wantcol + i) {
-            for (int j = 0; j < i; j++) {
-                Piece* pos = brd->arr[cur_pos.first][cur_pos.second - j];
-                if (pos != nullptr) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        // right
-        else if (cur_pos.first == wantrow && cur_pos.second == wantcol - i) {
-            for (int j = 0; j < i; j++) {
-                Piece* pos = brd->arr[cur_pos.first][cur_pos.second + j];
-                if (pos != nullptr) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        //up
-        else if (cur_pos.first == wantrow + i && cur_pos.second == wantcol) {
-            for (int j = 1; j < i; j++) {
-                Piece* pos = brd->arr[cur_pos.first - j][cur_pos.second];
-                std::cout << pos;
-                if (pos != nullptr) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        //down
-        else if (cur_pos.first == wantrow - i && cur_pos.second == wantcol) {
-            for (int j = 0; j < i; j++) {
-                Piece* pos = brd->arr[cur_pos.first + j][cur_pos.second];
-                if (pos != nullptr) {
-                    return false;
-                }
-            }
-            return true;
-        }
+    int start;
+    int end;
+    if (cur_pos.first != wantrow and cur_pos.second != wantcol) {
+        return false;
     }
+
+
+
+
+    if (cur_pos.first == wantrow) {
+        if (cur_pos.second < wantcol) {
+            start = cur_pos.second+1;
+            end = wantcol;
+        }
+        else {
+           start = wantcol+1;
+            end = cur_pos.second;
+        }
+        for (int i =start ; i < end ; i++) {
+            if (brd->arr[cur_pos.first][i] != nullptr) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
+
+    if (cur_pos.second == wantcol) {
+        if (cur_pos.first < wantrow) {
+            start = cur_pos.first;
+            end = wantrow;
+        }
+        else {
+            start = wantrow+1;
+            end = cur_pos.first;
+        }
+        for (int i = start; i < end; i++) {
+            if (brd->arr[i][cur_pos.second] != nullptr) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     return false;
+
+
 }
 
 bool Knight::check_movement(int x, int y) {
