@@ -108,6 +108,17 @@ bool Rook::check_movement(int wantrow, int wantcol, chessboard* brd) {
 }
 
 bool Knight::check_movement(int x, int y) {
+
+
+
+    
+/*
+
+int rowdiff = abs(cur_row.first-wantrow);
+intcoldiff= abs(cur_pos.second-wantcol);
+return ((rowdiff==1 and coldiff== 2) or (rowdiff==2 and coldiff==1))
+
+*/
     std::cout << "in KN check move";
     if (cur_pos.first == x + 2 && cur_pos.second == y + 1) {
         return true;
