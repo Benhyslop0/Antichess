@@ -84,7 +84,7 @@ int main()
                 gameover = true;
             }
             //need to make auto pass thing, leave to me for now but checks bishop correct
-            else if (w.piece_is_taken() == true) {
+            else if (w.piece_is_taken() == true or w.nomoves()==1) {
                 std::cout << "Draw";
                 gameover = true;
             }
