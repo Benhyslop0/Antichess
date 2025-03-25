@@ -149,6 +149,18 @@ return ((rowdiff==1 and coldiff== 2) or (rowdiff==2 and coldiff==1))
     }
 }
 
+int dir(int x) {
+    if (x > 0) {
+        return 1;
+    }
+    if (x == 0) {
+        return 0;
+    }
+    if (x < 0) {
+        return -1;
+    }
+}
+
 bool Queen::check_movement(int wantrow, int wantcol, chessboard* brd) {
     int start;
     int end;
