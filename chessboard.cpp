@@ -1,449 +1,672 @@
 #include "chessboard.h"
 #include <iostream>
 #include <stdio.h>
-#include "pieces.h"
+#include <vector>
+#include <tuple>
 
 
 
 //checking for what piece has been clicked
-int chessboard::grid_pressed(int row, int col, int nrow, int ncol, chessboard board, bool bplaying, bool wplaying) {
-    Pawn p;
-    Queen q;
-    King k;
-    Bishop b;
-    Rook r;
-    Knight n;
-    bool wthere = false;
-    bool bthere = false;
-    int pos = arr[row][col];
-    int en = arr[nrow][ncol];
 
-
-
-    for (int i = 1; i <= 6; i++) {
-        if (i == en) {
-            bthere = true;
-        }
-    }
-    for (int i = 7; i <= 12; i++) {
-        if (i == en) {
-            wthere = true;
-        }
-    }
-    if (wplaying == true && pos > 6) {
-        std::cout << "Not your piece!";
+int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying, bool bplaying) {
+    //std::cout << "in gridpressed";
+    Piece* piece = arr[row][col];
+    if (piece == nullptr) {
         return 0;
     }
-    else if (bplaying == true && pos < 7) {
-        std::cout << "Not your piece!";
+    PieceColor colour = piece->get_colour();
+    PieceType pos = piece->get_type();
+
+    Piece* piece2 = arr[nrow][ncol];
+    PieceColor colour2;
+    if (piece2 == nullptr) {
+        colour2 = PieceColor::NONE_COLOR;
+    }
+    else {
+        colour2 = piece2->get_colour();
+    }
+
+    if (wplaying == true && colour == BLACK) {
+        //std::cout << "Not your piece!";
         return 0;
     }
+    else if (bplaying == true && colour == WHITE) {
+        //std::cout << "Not your piece!";
+        return 0;
+    }
+
+    BoardAware* boardAwarePiece = nullptr; // need to make here so its in the scope of the switch statement
     //checking black
-    switch (pos) {
-    case 1:
-        //is a rook
-        r.posassign(row, col, nrow, ncol);
-        //if not nothing happens and the user can try again although am having issues with updating currow
-        if (!r.movement(board)) {
-            clkco = 0;
-            return 0;
-        }
-        //if it can move then the grid will update itself
-        else {
-            if (wthere == true) {
-                updated_grid(row, col, nrow, ncol, pos);
-                piece_is_taken(en);
-                return 1;
-            }
-            else if (bthere == true) {
-                return 0;
-            }
-            else {
-                updated_grid(row, col, nrow, ncol, pos);
-                return 1;
-            }
-        }
-        break;
-    case 2:
-        //is a knight
-        n.posassign(row, col, nrow, ncol);
+    if (colour == BLACK) {
+        switch (pos) {
 
-        //white knights movement checker
-        if (!n.movement()) {
-            clkco = 0;
-            return 0;
-        }
+        case ROOK:
 
-        //board checking it's not taking its own teammate
-        else {
-            if (bthere == true) {
-                return 0;
-            }
-            else if (wthere == true) {
-                updated_grid(row, col, nrow, ncol, pos);
-                piece_is_taken(en);
-                std::cout << "haha i have taken";
-                return 1;
-            }
-            else {
-                updated_grid(row, col, nrow, ncol, pos);
-                return 1;
-            }
-        }
-        break;
-    case 3:
-        //is a bishop
-        b.posassign(row, col, nrow, ncol);
-        //if not nothing happens and the user can try again although am having issues with updating currow
-        if (!b.movement(board)) {
-            clkco = 0;
-            return 0;
-        }
-        //if it can move then the grid will update itself
-        else {
-            if (wthere == true) {
-                updated_grid(row, col, nrow, ncol, pos);
-                piece_is_taken(en);
-                return 1;
-            }
-            else if (bthere == true) {
-                return 0;
-            }
-            else {
-                updated_grid(row, col, nrow, ncol, pos);
-                return 1;
-            }
-        }
-        break;
-    case 4:
-        //is a queen
-        q.posassign(row, col, nrow, ncol);
-        //if not nothing happens and the user can try again although am having issues with updating currow
-        if (!q.movement(board)) {
-            clkco = 0;
-            return 0;
-        }
-        //if it can move then the grid will update itself
-        else {
-            if (wthere == true) {
-                updated_grid(row, col, nrow, ncol, pos);
-                piece_is_taken(en);
-                return 1;
-            }
-            else if (bthere == true) {
-                return 0;
-            }
-            else {
-                updated_grid(row, col, nrow, ncol, pos);
-                return 1;
-            }
-        }
-        break;
-        //is queen
-    case 5:
-        k.posassign(row, col, nrow, ncol);
-        //if not nothing happens and the user can try again although am having issues with updating currow
-        if (!k.movement()) {
-            clkco = 0;
-            return 0;
-        }
-        //if it can move then the grid will update itself
-        else {
-            if (wthere == true) {
-                updated_grid(row, col, nrow, ncol, pos);
-                piece_is_taken(en);
-                return 1;
-            }
-            else if (bthere == true) {
-                return 0;
-            }
-            else {
-                updated_grid(row, col, nrow, ncol, pos);
-                return 1;
-            }
-        }
-        break;
-        //is a king
 
-    case 6:
-        //is a pawn
-        //a good example of how grid asks pawn if it can move to a position
-        p.posassign(row, col, nrow, ncol);
-        //if not nothing happens and the user can try again although am having issues with updating currow
-        if (!p.movement(pos)) {
-            clkco = 0;
-            return 0;
-        }
-        //if it can move then the grid will update itself
-        else {
-            if (nrow == row + 1 && wthere == true && (ncol == col + 1 || ncol == col - 1)) {
-                updated_grid(row, col, nrow, ncol, pos);
-                piece_is_taken(en);
-                return 1;
-            }
-            else if (wthere == true || bthere == true) {
+            //doing this cause inheritance is a pain
+            boardAwarePiece = dynamic_cast<BoardAware*>(piece);
+            if (!boardAwarePiece->check_movement(nrow, ncol, this)) {
+                clkco = 0;
                 return 0;
             }
+            //if it can move then the grid will update itself
             else {
-                updated_grid(row, col, nrow, ncol, pos);
+                if (colour2 == PieceColor::WHITE) {
+                    updated_grid(row, col, nrow, ncol, piece, PieceType::ROOK);
+                    piece_is_taken(piece2->get_type());
+                    return 1;
+                }
+                else if (colour2 == PieceColor::BLACK) {
+                    //std::cout << "cant move there mate";
+                    return 0;
+                }
+                else {
+                    updated_grid(row, col, nrow, ncol, piece, PieceType::ROOK);
+                    return 1;
+                }
+
+            }
+        case KNIGHT:
+            //is a knight
+            //white knights movement checker
+            if (!piece->check_movement(nrow, ncol)) {
+                clkco = 0;
+            }
+
+            //board checking it's not taking its own teammate
+            else {
+                if (colour2 == PieceColor::WHITE) {
+                    updated_grid(row, col, nrow, ncol, piece, PieceType::KNIGHT);
+                    piece_is_taken(piece2->get_type());
+                    //std::cout << "haha i have taken";
+                    return 1;
+                }
+                else if (colour2 == PieceColor::BLACK) {
+                    //std::cout << "cant move there mate";
+                    return 0;
+                }
+                else {
+                    updated_grid(row, col, nrow, ncol, piece, PieceType::KNIGHT);
+                    return 1;
+                }
+            }
+            break;
+        case BISHOP:
+            //is a bishop
+            //if not nothing happens and the user can try again although am having issues with updating currow
+            boardAwarePiece = dynamic_cast<BoardAware*>(piece);
+            if (!boardAwarePiece->check_movement(nrow, ncol, this)) {
+                clkco = 0;
+                return 0;
+            }
+            //if it can move then the grid will update itself
+            else {
+                if (colour2 == PieceColor::WHITE) {
+                    updated_grid(row, col, nrow, ncol, piece, PieceType::BISHOP);
+                    piece_is_taken(piece2->get_type());
+                    return 1;
+                }
+                else if (colour2 == PieceColor::BLACK) {
+                    //std::cout << "cant move there mate";
+                    return 0;
+                }
+                else {
+                    updated_grid(row, col, nrow, ncol, piece, PieceType::BISHOP);
+                    return 1;
+                }
+
+            }
+            //if it can move then the grid will update itself
+            break;
+        case QUEEN:
+            //is a queen
+
+            //if not nothing happens and the user can try again although am having issues with updating currow
+            boardAwarePiece = dynamic_cast<BoardAware*>(piece);
+            if (!boardAwarePiece->check_movement(nrow, ncol, this)) {
+                clkco = 0;
+                return 0;
+            }
+            //if it can move then the grid will update itself
+            else {
+                if (colour2 == PieceColor::WHITE) {
+                    updated_grid(row, col, nrow, ncol, piece, PieceType::QUEEN);
+                    piece_is_taken(piece2->get_type());
+                    return 1;
+                }
+                else if (colour2 == PieceColor::BLACK) {
+                   // std::cout << "cant move there mate";
+                    return 0;
+                }
+                else {
+                    updated_grid(row, col, nrow, ncol, piece, PieceType::QUEEN);
+                    return 1;
+                }
+
+            }
+            break;
+
+        case KING:
+            //if not nothing happens and the user can try again although am having issues with updating currow
+            if (!piece->check_movement(nrow, ncol)) {
+                clkco = 0;
+                return 0;
+            }
+
+            //if it can move then the grid will update itself
+            else {
+                if (colour2 == PieceColor::WHITE) {
+                    updated_grid(row, col, nrow, ncol, piece, PieceType::KING);
+                    piece_is_taken(piece2->get_type());
+                    return 1;
+                }
+                else if (colour2 == PieceColor::BLACK) {
+                   // std::cout << "cant move there mate";
+                    return 0;
+                }
+                else {
+                    updated_grid(row, col, nrow, ncol, piece, PieceType::KING);
+                    return 1;
+                }
+
+            }
+            break;
+
+
+        case PAWN:
+          //  std::cout << "its a pawn";
+            //is a pawn
+            //a good example of how grid asks pawn if it can move to a position
+            boardAwarePiece = dynamic_cast<BoardAware*>(piece);
+            if (!boardAwarePiece->check_movement(nrow, ncol, this)) {
+                clkco = 0;
+                return 0;
+            }
+
+            //if it can move then the grid will update itself
+            else if (nrow == row + 1 && colour2 == WHITE && (ncol == col + 1 || ncol == col - 1)) {
+                // Check if at last row
+                if (nrow == 7) {  // Check if pawn has reached the last row
+                    bool invalid = true;
+                    int choice;  // Take input as an integer
+
+                    while (invalid) {
+                      //  std::cout << "Promote to (1: Rook, 2: Knight, 3: Bishop, 4: Queen): ";
+                        std::cin >> choice;
+
+                        if (choice >= 1 && choice <= 4) {
+                            pos = static_cast<PieceType>(choice);  // Convert integer to enum
+                            invalid = false;
+                        }
+                        else {
+                        //    std::cout << "Invalid choice! Please enter 1, 2, 3, or 4.\n";
+                        }
+                    }
+                }
+                updated_grid(row, col, nrow, ncol, piece, pos);
+                piece_is_taken(piece2->get_type());
                 return 1;
             }
+
+            else {
+                // bool funtion here to check if it at the last row and then ask the user what they want to change it to
+                if (nrow == 7) {  // Check if pawn has reached the last row
+                    bool invalid = true;
+                    int choice;  // Take input as an integer
+
+                    while (invalid) {
+                      //  std::cout << "Promote to (1: Rook, 2: Knight, 3: Bishop, 4: Queen): ";
+                        std::cin >> choice;
+
+                        if (choice >= 1 && choice <= 4) {
+                            pos = static_cast<PieceType>(choice);  // Convert integer to enum
+                            invalid = false;
+                        }
+                        else {
+                        //    std::cout << "Invalid choice! Please enter 1, 2, 3, or 4.\n";
+                        }
+                    }
+                }
+                updated_grid(row, col, nrow, ncol, piece, pos);
+                return 1;
+            }
+            return 0;
+            break;
         }
-        break;
     }
-    //checking white
-    switch (pos) {
-    case 7:
-        p.posassign(row, col, nrow, ncol);
-        if (!p.movement(pos)) {
-            clkco = 0;
-            return 0;
-        }
-        else {
-            //can it be attacking?
-            if (nrow == row - 1 && bthere == true && (ncol == col + 1 || ncol == col - 1)) {
-                updated_grid(row, col, nrow, ncol, pos);
-                piece_is_taken(en);
-                return 1;
-            }
-            else if (wthere == true || bthere == true) {
-                return 0;
-            }
-            else {
-                updated_grid(row, col, nrow, ncol, pos);
-                return 1;
-            }
-        }
-        //is a pawn
-        break;
-    case 8:
-        //is a rook
-        r.posassign(row, col, nrow, ncol);
-        //if not nothing happens and the user can try again although am having issues with updating currow
-        if (!r.movement(board)) {
-            clkco = 0;
-            return 0;
-        }
-        //if it can move then the grid will update itself
-        else {
-            if (bthere == true) {
-                updated_grid(row, col, nrow, ncol, pos);
-                piece_is_taken(en);
-                return 1;
-            }
-            else if (wthere == true) {
-                return 0;
-            }
-            else {
-                updated_grid(row, col, nrow, ncol, pos);
-                return 1;
-            }
-        }
-        break;
-    case 9:
-        //is a knight
-        n.posassign(row, col, nrow, ncol);
+    else if (colour == WHITE) {
 
-        //white knights movement checker
-        if (!n.movement()) {
-            clkco = 0;
-            return 0;
-        }
+        //checking white
+        switch (pos) {
 
-        //board checking it's not taking its own teammate
-        else {
-            if (bthere == true) {
-                updated_grid(row, col, nrow, ncol, pos);
-                piece_is_taken(en);
-                std::cout << "haha i have taken";
-                return 1;
-            }
-            else if (wthere == true) {
-                std::cout << "cant move there mate";
+        case PAWN:
+            boardAwarePiece = dynamic_cast<BoardAware*>(piece);
+            if (!boardAwarePiece->check_movement(nrow, ncol, this)) {
+
+                clkco = 0;
                 return 0;
             }
             else {
-                updated_grid(row, col, nrow, ncol, pos);
-                return 1;
+                //can it be attacking?
+                if (nrow == row - 1 && colour2 == BLACK && (ncol == col + 1 || ncol == col - 1)) {
+                    if (nrow == 0) {  // Check if pawn has reached the last row
+                        bool invalid = true;
+                        int choice;  // Take input as an integer
+
+                        while (invalid) {
+                          //  std::cout << "Promote to (1: Rook, 2: Knight, 3: Bishop, 4: Queen): ";
+                            std::cin >> choice;
+
+                            if (choice >= 1 && choice <= 4) {
+                                pos = static_cast<PieceType>(choice);  // Convert integer to enum
+                                invalid = false;
+                            }
+                            else {
+                            //    std::cout << "Invalid choice! Please enter 1, 2, 3, or 4.\n";
+                            }
+                        }
+                    }
+
+                    updated_grid(row, col, nrow, ncol, piece, pos);
+                    piece_is_taken(piece2->get_type());
+                    return 1;
+
+                }
+                else if (colour2 == WHITE || colour2 == BLACK) {
+                //    std::cout << "cant move there mate";
+                    return 0;
+
+                }
+                else {
+                    if (nrow == 0) {  // Check if pawn has reached the last row
+                        bool invalid = true;
+                        int choice;  // Take input as an integer
+
+                        while (invalid) {
+                          //  std::cout << "Promote to (1: Rook, 2: Knight, 3: Bishop, 4: Queen): ";
+                            std::cin >> choice;
+
+                            if (choice >= 1 && choice <= 4) {
+                                pos = static_cast<PieceType>(choice);  // Convert integer to enum
+                                invalid = false;
+                            }
+                            else {
+                             //   std::cout << "Invalid choice! Please enter 1, 2, 3, or 4.\n";
+                            }
+                        }
+                    }
+                    updated_grid(row, col, nrow, ncol, piece, pos);
+                    return 1;
+                }
+
+
             }
-        }
-        break;
-    case 10:
-        //is a bishop
-        b.posassign(row, col, nrow, ncol);
-        //if not nothing happens and the user can try again although am having issues with updating currow
-        if (!b.movement(board)) {
-            clkco = 0;
-            return 0;
-        }
-        //if it can move then the grid will update itself
-        else {
-            if (bthere == true) {
-                updated_grid(row, col, nrow, ncol, pos);
-                piece_is_taken(en);
-                return 1;
-            }
-            else if (wthere == true) {
+            //is a pawn
+            break;
+        case ROOK:
+            //is a rook
+            //if not nothing happens and the user can try again although am having issues with updating currow
+            boardAwarePiece = dynamic_cast<BoardAware*>(piece);
+            if (!boardAwarePiece->check_movement(nrow, ncol, this)) {
+                clkco = 0;
                 return 0;
             }
+            //if it can move then the grid will update itself
             else {
-                updated_grid(row, col, nrow, ncol, pos);
-                return 1;
+                if (colour2 == BLACK) {
+                    updated_grid(row, col, nrow, ncol, piece, pos);
+                    piece_is_taken(piece2->get_type());
+                    return 1;
+                }
+                else if (colour2 == WHITE) {
+                   // std::cout << "cant move there mate";
+                    return 0;
+                }
+                else {
+                    updated_grid(row, col, nrow, ncol, piece, pos);
+                    return 1;
+                }
+
             }
-        }
-        break;
-    case 11:
-        //is a queen
-        q.posassign(row, col, nrow, ncol);
-        //if not nothing happens and the user can try again although am having issues with updating currow
-        if (!q.movement(board)) {
-            clkco = 0;
-            return 0;
-        }
-        //if it can move then the grid will update itself
-        else {
-            if (bthere == true) {
-                updated_grid(row, col, nrow, ncol, pos);
-                piece_is_taken(en);
-                return 1;
-            }
-            else if (wthere == true) {
+            break;
+        case KNIGHT:
+            //is a knight
+
+            //white knights movement checker
+            if (!piece->check_movement(nrow, ncol)) {
+                clkco = 0;
                 return 0;
             }
+
+            //board checking it's not taking its own teammate
             else {
-                updated_grid(row, col, nrow, ncol, pos);
-                return 1;
+                if (colour2 == BLACK) {
+                    updated_grid(row, col, nrow, ncol, piece, pos);
+                    piece_is_taken(piece2->get_type(), colour2);
+                 //   std::cout << "haha i have taken";
+                    return 1;
+                }
+                else if (colour2 == WHITE) {
+                 //   std::cout << "cant move there mate";
+                    return 0;
+                }
+                else {
+                    updated_grid(row, col, nrow, ncol, piece, pos);
+                    return 1;
+                }
             }
-        }
-        break;
-    case 12:
-        //is a king
-        k.posassign(row, col, nrow, ncol);
-        //if not nothing happens and the user can try again although am having issues with updating currow
-        if (!k.movement()) {
-            clkco = 0;
-            return 0;
-        }
-        //if it can move then the grid will update itself
-        else {
-            if (bthere == true) {
-                updated_grid(row, col, nrow, ncol, pos);
-                piece_is_taken(en);
-                return 1;
-            }
-            else if (wthere == true) {
+            break;
+        case BISHOP:
+            //is a bishop
+            //if not nothing happens and the user can try again although am having issues with updating currow
+            boardAwarePiece = dynamic_cast<BoardAware*>(piece);
+            if (!boardAwarePiece->check_movement(nrow, ncol, this)) {
+                clkco = 0;
                 return 0;
             }
+            //if it can move then the grid will update itself
             else {
-                updated_grid(row, col, nrow, ncol, pos);
-                return 1;
+                if (colour2 == BLACK) {
+                    updated_grid(row, col, nrow, ncol, piece, pos);
+                    piece_is_taken(piece2->get_type(), colour2);
+                    return 1;
+                }
+                else if (colour2 == WHITE) {
+                //    std::cout << "cant move there mate";
+                    return 0;
+                }
+                else {
+                    updated_grid(row, col, nrow, ncol, piece, pos);
+                    return 1;
+                }
+
             }
+            break;
+        case QUEEN:
+            //is a queen
+            //if not nothing happens and the user can try again although am having issues with updating currow
+            boardAwarePiece = dynamic_cast<BoardAware*>(piece);
+            if (!boardAwarePiece->check_movement(nrow, ncol, this)) {
+                clkco = 0;
+                return 0;
+            }
+            //if it can move then the grid will update itself
+            else {
+                if (colour2 == BLACK) {
+                    updated_grid(row, col, nrow, ncol, piece, pos);
+                    piece_is_taken(piece2->get_type(), colour2);
+                    return 1;
+                }
+                else if (colour2 == WHITE) {
+                  //  std::cout << "cant move there mate";
+                    return 0;
+                }
+                else {
+                    updated_grid(row, col, nrow, ncol, piece, pos);
+                    return 1;
+                }
+
+            }
+            break;
+        case KING:
+            //is a king
+            //if not nothing happens and the user can try again although am having issues with updating currow
+            if (!piece->check_movement(nrow, ncol)) {
+                clkco = 0;
+                return 0;
+            }
+            //if it can move then the grid will update itself
+            else {
+                if (colour2 == BLACK) {
+                    updated_grid(row, col, nrow, ncol, piece, pos);
+                    piece_is_taken(piece2->get_type(), colour2);
+                    return 1;
+                }
+                else if (colour2 == WHITE) {
+                //    std::cout << "cant move there mate";
+                    return 0;
+                }
+                else {
+                    updated_grid(row, col, nrow, ncol, piece, pos);
+                    return 1;
+                }
+            }
+
+            break;
         }
-        break;
     }
-
-    return 0;
-}
-int chessboard::updated_grid(int rowold, int colold, int rownew, int colnew, int piecenum) {
-
-    arr[rowold][colold] = 0;
-    arr[rownew][colnew] = piecenum;
-    clkco = 0;
     return 1;
 }
-void chessboard::printBoard() {
-    std::cout << "\n    A    B    C    D    E    F    G    H\n  ----------------------------------------\n";
-    for (int i = 0; i < 8; i++) {
+int chessboard::updated_grid(int rowold, int colold, int rownew, int colnew, Piece* piece, PieceType type) {
+    PieceColor pieceColor = piece->get_colour();
+    delete arr[rowold][colold];
+    arr[rowold][colold] = nullptr;
+    delete arr[rownew][colnew];
+    switch (type) {
+    case PAWN:
+        arr[rownew][colnew] = new Pawn(rownew, colnew, pieceColor);
+        break;
+    case ROOK:
+        arr[rownew][colnew] = new Rook(rownew, colnew, pieceColor);
+        break;
+    case KNIGHT:
+        arr[rownew][colnew] = new Knight(rownew, colnew, pieceColor);
+        break;
+    case QUEEN:
+        arr[rownew][colnew] = new Queen(rownew, colnew, pieceColor);
+        break;
+    case BISHOP:
+        arr[rownew][colnew] = new Bishop(rownew, colnew, pieceColor);
+        break;
+    case KING:
+        arr[rownew][colnew] = new King(rownew, colnew, pieceColor);
+        break;
+    }
+    clkco = 0;
+    return 0;
+}
+void chessboard::printBoard(bool wplaying, bool bplaying) {
 
-        std::cout << i + 1 << "|";
-        for (int j = 0; j < 8; j++) {
-            int pos = arr[i][j];
-            switch (pos) {
-            case 0:
-                std::cout << "    |";
-                break;
-            case 1:
-                std::cout << " br |";
-                break;
-            case 2:
-                std::cout << " bn |";
-                break;
-            case 3:
-                std::cout << " bb |";
-                break;
-            case 4:
-                std::cout << " bq |";
-                break;
-            case 5:
-                std::cout << " bk |";
-                break;
-            case 6:
-                std::cout << " bp |";
-                break;
-            case 7:
-                std::cout << " wp |";
-                break;
-            case 8:
-                std::cout << " wr |";
-                break;
-            case 9:
-                std::cout << " wn |";
-                break;
-            case 10:
-                std::cout << " wb |";
-                break;
-            case 11:
-                std::cout << " wq |";
-                break;
-            case 12:
-                std::cout << " wk |";
-                break;
+
+    if (wplaying) {
+        std::cout << "\n    A    B    C    D    E    F    G    H\n  ----------------------------------------\n";
+        for (int i = 0; i < 8; i++) {
+
+            std::cout << i + 1 << "|";
+            for (int j = 0; j < 8; j++) {
+                if (arr[i][j] == nullptr) {
+                    std::cout << "    |";
+                    continue;
+                }
+                else {
+                    Piece* piece = arr[i][j];
+                    PieceType pos = piece->get_type();
+                    if (piece->get_colour() == PieceColor::WHITE) {
+                        if (pos == PieceType::PAWN) {
+                            std::cout << " wp |";
+                        }
+                        else if (pos == PieceType::ROOK) {
+                            std::cout << " wr |";
+                        }
+                        else if (pos == PieceType::KNIGHT) {
+                            std::cout << " wn |";
+                        }
+                        else if (pos == PieceType::BISHOP) {
+                            std::cout << " wb |";
+                        }
+                        else if (pos == PieceType::QUEEN) {
+                            std::cout << " wq |";
+                        }
+                        else if (pos == PieceType::KING) {
+                            std::cout << " wk |";
+                        }
+
+                    }
+                    else {
+                        if (pos == PieceType::PAWN) {
+                            std::cout << " bp |";
+                        }
+                        else if (pos == PieceType::ROOK) {
+                            std::cout << " br |";
+                        }
+                        else if (pos == PieceType::KNIGHT) {
+                            std::cout << " bn |";
+                        }
+                        else if (pos == PieceType::BISHOP) {
+                            std::cout << " bb |";
+                        }
+                        else if (pos == PieceType::QUEEN) {
+                            std::cout << " bq |";
+                        }
+                        else if (pos == PieceType::KING) {
+                            std::cout << " bk |";
+                        }
+                    }
+                }
             }
+            std::cout << i + 1 << " \n |----------------------------------------\n";
+
         }
-        std::cout << i + 1 << " \n |----------------------------------------\n";
+        std::cout << "    A    B    C    D    E    F    G    H";
+    }
+    if (bplaying) {
+        std::cout << "\n    H    G    F    E    D    C    B    A\n  ----------------------------------------\n";
+        for (int i = 7; i >= 0; i--) {
+
+            std::cout << i+1 << "|";
+            for (int j = 7; j >=0; j--) {
+                if (arr[i][j] == nullptr) {
+                    std::cout << "    |";
+                    continue;
+                }
+                else {
+                    Piece* piece = arr[i][j];
+                    PieceType pos = piece->get_type();
+                    if (piece->get_colour() == PieceColor::WHITE) {
+                        if (pos == PieceType::PAWN) {
+                            std::cout << " wp |";
+                        }
+                        else if (pos == PieceType::ROOK) {
+                            std::cout << " wr |";
+                        }
+                        else if (pos == PieceType::KNIGHT) {
+                            std::cout << " wn |";
+                        }
+                        else if (pos == PieceType::BISHOP) {
+                            std::cout << " wb |";
+                        }
+                        else if (pos == PieceType::QUEEN) {
+                            std::cout << " wq |";
+                        }
+                        else if (pos == PieceType::KING) {
+                            std::cout << " wk |";
+                        }
+
+                    }
+                    else {
+                        if (pos == PieceType::PAWN) {
+                            std::cout << " bp |";
+                        }
+                        else if (pos == PieceType::ROOK) {
+                            std::cout << " br |";
+                        }
+                        else if (pos == PieceType::KNIGHT) {
+                            std::cout << " bn |";
+                        }
+                        else if (pos == PieceType::BISHOP) {
+                            std::cout << " bb |";
+                        }
+                        else if (pos == PieceType::QUEEN) {
+                            std::cout << " bq |";
+                        }
+                        else if (pos == PieceType::KING) {
+                            std::cout << " bk |";
+                        }
+                    }
+                }
+            }
+            std::cout << i+1 << " \n |----------------------------------------\n";
+
+        }
+        std::cout << "    H    G    F    E    D    C    B    A";
+
+
 
     }
-    std::cout << "    A    B    C    D    E    F    G    H";
-
 };
 
+bool chessboard::piece_is_taken(PieceType piecenum, PieceColor colour, Tile_color tile) {
+    if (piecenum == ROOK) {
+        rookco--;
+        if (colour == WHITE) {
+            wtaken--;
+        }
+        else {
+            btaken--;
+        }
 
-void chessboard::piece_is_taken(int piecenum) {
-    if (piecenum == 1) {
-        btaken--;
     }
-    else if (piecenum == 2) {
-        btaken--;
+    else if (piecenum == KNIGHT) {
+        knightco--;
+        if (colour == WHITE) {
+            wtaken--;
+        }
+        else {
+            btaken--;
+        }
     }
-    else if (piecenum == 3) {
-        btaken--;
+    else if (piecenum == BISHOP) {
+        bishopco--;
+        if (colour == WHITE) {
+            wtaken--;
+        }
+        else {
+            btaken--;
+        }
+        if (tile == WHITE_TILE) {
+            w_tile_bishop--;
+        }
+        else {
+            b_tile_bishop--;
+        }
     }
-    else if (piecenum == 4) {
-        btaken--;
+    else if (piecenum == KING) {
+        kingco--;
+        if (colour == WHITE) {
+            wtaken--;
+        }
+        else {
+            btaken--;
+        }
     }
-    else if (piecenum == 5) {
-        btaken--;
+    else if (piecenum == QUEEN) {
+        queenco--;
+        if (colour == WHITE) {
+            wtaken--;
+        }
+        else {
+            btaken--;
+        }
     }
-    else if (piecenum == 6) {
-        btaken--;
+    else if (piecenum == PAWN) {
+        if (colour == WHITE) {
+            wptaken--;
+            wtaken--;
+        }
+        else {
+            bptaken--;
+            btaken--;
+        }
     }
-    else if (piecenum == 7) {
-        wtaken--;
+    //absolutley fucking horrible way of checking that only bishops remain
+    if (wptaken == 0 && bptaken == 0 && rookco == 0 && knightco == 0 && queenco == 0 && kingco == 0 && bishopco == 2 && w_tile_bishop == 1 && b_tile_bishop == 1) {
+        return true;
     }
-    else if (piecenum == 8) {
-        wtaken--;
+    else if (wptaken == 0 && bptaken == 0 && rookco == 0 && knightco == 0 && queenco == 0 && kingco == 2 && bishopco == 0) {
+        return true;
     }
-    else if (piecenum == 9) {
-        wtaken--;
-    }
-    else if (piecenum == 10) {
-        wtaken--;
-    }
-    else if (piecenum == 11) {
-        wtaken--;
-    }
-    else if (piecenum == 12) {
-        wtaken--;
+    else {
+        return false;
     }
 }
 
@@ -465,326 +688,113 @@ bool chessboard::is_black_gone() {
     }
 }
 
-bool chessboard::cantake(chessboard brd, bool wturn, bool bturn) {
-    chessboard test;
-    for (int i = 0; i <= 7; i++) {
-        for (int j = 0; j <= 7; j++) {
-            int pos = brd.arr[i][j];
-            if (bturn == true and pos >= 1 and pos <= 6) {
-                for (int k = 0; k <= 7; k++) {
-                    for (int l = 0; l <= 7; l++) {
-                        if (brd.grid_noturn(i, j, k, l, brd) == 1 and brd.arr[k][l] >= 7) {
-                            return true;
-                        }
-                    }
-                }
-            }
-            else if (wturn == true and pos >= 7) {
-                for (int k = 0; k <= 7; k++) {
-                    for (int l = 0; l <= 7; l++) {
 
-                        if (brd.grid_noturn(i, j, k, l, brd) == 1 and (brd.arr[k][l] >= 1 and brd.arr[k][l] <= 6)){
-                            return true;
-                        }   
+
+int chessboard::nomoves(bool wplaying, bool bplaying) {
+    Piece* piece;
+    if (bplaying) {
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 7; j++) {
+                if ((this->arr[i][j]->get_colour() == BLACK) and (this->arr[i][j]->get_type() == PAWN)) {
+                    piece = this->arr[i][j];
+                    if (piece->check_movement(piece -> get_pos().first,piece -> get_pos().second+1)) {
+                        return 0;
+                    }
+                    if (piece->check_movement(piece->get_pos().first+1, piece->get_pos().second + 1)) {
+                        return 0;
+                    }
+                    if (piece->check_movement(piece->get_pos().first-1, piece->get_pos().second + 1)) {
+                        return 0;
                     }
                 }
+
+
             }
         }
     }
-    std::cout << "returned false";
-    return false;
+    if (wplaying) {
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 7; j++) {
+                if ((this->arr[i][j]->get_colour() == WHITE) and (this->arr[i][j]->get_type() == PAWN)) {
+                    piece = this->arr[i][j];
+                    if (piece->check_movement(piece->get_pos().first, piece->get_pos().second -1)) {
+                        return 0;
+                    }
+                    if (piece->check_movement(piece->get_pos().first - 1, piece->get_pos().second - 1)) {
+                        return 0;
+                    }
+                    if (piece->check_movement(piece->get_pos().first + 1, piece->get_pos().second - 1)) {
+                        return 0;
+                    }
+                }
+
+
+            }
+        }
+    }
+    return 1;
 }
 
-int chessboard::grid_noturn(int row, int col, int nrow, int ncol, chessboard board) {
-    Pawn p;
-    Queen q;
-    King k;
-    Bishop b;
-    Rook r;
-    Knight n;
-    bool wthere = false;
-    bool bthere = false;
-    int pos = arr[row][col];
-    int en = arr[nrow][ncol];
-
-
-
-    for (int i = 1; i <= 6; i++) {
-        if (i == en) {
-            bthere = true;
+int chessboard::cantake(bool wplaying, bool bplaying) {
+    std::vector<Piece*> wpieces;
+    std::vector<Piece*> bpieces;
+    for (int i = 0; i < 7; i++) {
+        for (int j = 0; j < 7; j++) {
+            if (this->arr[i][j] != nullptr) {
+                if (this->arr[i][j]->get_colour() == WHITE) {
+                    wpieces.push_back(this->arr[i][j]);
+                }
+                if (this->arr[i][j]->get_colour() == BLACK) {
+                    bpieces.push_back(this->arr[i][j]);
+                };
+            }
         }
     }
-    for (int i = 7; i <= 12; i++) {
-        if (i == en) {
-            wthere = true;
+
+    if (wplaying and !wpieces.empty() and !bpieces.empty()) {
+        for (int i = 0; i < wpieces.size(); i++) {
+            for (int j = 0; j < bpieces.size(); j++) {
+                int bx, by;
+                std::tie(bx, by) = bpieces[j]->get_pos();
+                PieceType type = wpieces.at(i)->get_type();
+                if (type == KING or type == KNIGHT) {
+                    if (wpieces.at(i)->check_movement(bx, by)) {
+                        return 1;
+                    }
+                }
+                if (type == QUEEN or type == BISHOP or type == ROOK or type == PAWN) {
+                    BoardAware* boardAwarePiece = dynamic_cast<BoardAware*>(wpieces.at(i));
+                    if (boardAwarePiece->check_movement(bx, by, this)) {
+                        return 1;
+                    }
+                }
+            }
         }
     }
-    //checking black
-    switch (pos) {
-    case 1:
-        //is a rook
-        r.posassign(row, col, nrow, ncol);
-        //if not nothing happens and the user can try again although am having issues with updating currow
-        if (!r.movement(board)) {
-            clkco = 0;
-            return 0;
-        }
-        //if it can move then the grid will update itself
-        else {
-            if (wthere == true) {
 
-                return 1;
-            }
-            else if (bthere == true) {
-                return 0;
-            }
-            else {
+    if (bplaying and !bpieces.empty() and !wpieces.empty()) {
+       // std::cout << "i know blacks playing";
+        for (int i = 0; i < bpieces.size(); i++) {
+            for (int j = 0; j < wpieces.size(); j++) {
+                int wx, wy;
+                std::tie(wx, wy) = wpieces[j]->get_pos();
+                PieceType type = bpieces.at(i)->get_type();
+                if (type == KING or type == KNIGHT) {
+                    if (bpieces.at(i)->check_movement(wx, wy)) {
+                        return 1;
+                    }
+                }
+                if (type == QUEEN or type == BISHOP or type == ROOK or type == PAWN) {
+                    BoardAware* boardAwarePiece = dynamic_cast<BoardAware*>(bpieces.at(i));
+                    if (boardAwarePiece->check_movement(wx, wy, this)) {
+              //          std::cout << "inbside if";
+                        return 1;
+                    }
 
-                return 1;
+                }
             }
         }
-        break;
-    case 2:
-        //is a knight
-        n.posassign(row, col, nrow, ncol);
-
-        //white knights movement checker
-        if (!n.movement()) {
-            clkco = 0;
-            return 0;
-        }
-
-        //board checking it's not taking its own teammate
-        else {
-            if (bthere == true) {
-                return 0;
-            }
-            else if (wthere == true) {
-                return 1;
-            }
-            else {
-                return 1;
-            }
-        }
-        break;
-    case 3:
-        //is a bishop
-        b.posassign(row, col, nrow, ncol);
-        //if not nothing happens and the user can try again although am having issues with updating currow
-        if (!b.movement(board)) {
-            clkco = 0;
-            return 0;
-        }
-        //if it can move then the grid will update itself
-        else {
-            if (wthere == true) {
-                return 1;
-            }
-            else if (bthere == true) {
-                return 0;
-            }
-            else {
-                return 1;
-            }
-        }
-        break;
-    case 4:
-        //is a queen
-        q.posassign(row, col, nrow, ncol);
-        //if not nothing happens and the user can try again although am having issues with updating currow
-        if (!q.movement(board)) {
-            clkco = 0;
-            return 0;
-        }
-        //if it can move then the grid will update itself
-        else {
-            if (wthere == true) {
-                return 1;
-            }
-            else if (bthere == true) {
-                return 0;
-            }
-            else {
-                return 1;
-            }
-        }
-        break;
-        //is queen
-    case 5:
-        k.posassign(row, col, nrow, ncol);
-        //if not nothing happens and the user can try again although am having issues with updating currow
-        if (!k.movement()) {
-            clkco = 0;
-            return 0;
-        }
-        //if it can move then the grid will update itself
-        else {
-            if (wthere == true) {
-                return 1;
-            }
-            else if (bthere == true) {
-                return 0;
-            }
-            else {
-                return 1;
-            }
-        }
-        break;
-        //is a king
-
-    case 6:
-        //is a pawn
-        //a good example of how grid asks pawn if it can move to a position
-        p.posassign(row, col, nrow, ncol);
-        //if not nothing happens and the user can try again although am having issues with updating currow
-        if (!p.movement(pos)) {
-            clkco = 0;
-            return 0;
-        }
-        //if it can move then the grid will update itself
-        else {
-            if (nrow == row + 1 && wthere == true && (ncol == col + 1 || ncol == col - 1)) {
-                return 1;
-            }
-            else if (wthere == true || bthere == true) {
-                return 0;
-            }
-            else {
-                return 1;
-            }
-        }
-        break;
     }
-    //checking white
-    switch (pos) {
-    case 7:
-        p.posassign(row, col, nrow, ncol);
-        if (!p.movement(pos)) {
-            clkco = 0;
-            return 0;
-        }
-        else {
-            //can it be attacking?
-            if (nrow == row - 1 && bthere == true && (ncol == col + 1 || ncol == col - 1)) {
-                return 1;
-            }
-            else if (wthere == true || bthere == true) {
-                return 0;
-            }
-            else {
-                return 1;
-            }
-        }
-        //is a pawn
-        break;
-    case 8:
-        //is a rook
-        r.posassign(row, col, nrow, ncol);
-        //if not nothing happens and the user can try again although am having issues with updating currow
-        if (!r.movement(board)) {
-            clkco = 0;
-            return 0;
-        }
-        //if it can move then the grid will update itself
-        else {
-            if (bthere == true) {
-                return 1;
-            }
-            else if (wthere == true) {
-                return 0;
-            }
-            else {
-                return 1;
-            }
-        }
-        break;
-    case 9:
-        //is a knight
-        n.posassign(row, col, nrow, ncol);
-
-        //white knights movement checker
-        if (!n.movement()) {
-            clkco = 0;
-            return 0;
-        }
-
-        //board checking it's not taking its own teammate
-        else {
-            if (bthere == true) {
-                return 1;
-            }
-            else if (wthere == true) {
-                return 0;
-            }
-            else {
-                return 1;
-            }
-        }
-        break;
-    case 10:
-        //is a bishop
-        b.posassign(row, col, nrow, ncol);
-        //if not nothing happens and the user can try again although am having issues with updating currow
-        if (!b.movement(board)) {
-            clkco = 0;
-            return 0;
-        }
-        //if it can move then the grid will update itself
-        else {
-            if (bthere == true) {
-                return 1;
-            }
-            else if (wthere == true) {
-                return 0;
-            }
-            else {
-                return 1;
-            }
-        }
-        break;
-    case 11:
-        //is a queen
-        q.posassign(row, col, nrow, ncol);
-        //if not nothing happens and the user can try again although am having issues with updating currow
-        if (!q.movement(board)) {
-            clkco = 0;
-            return 0;
-        }
-        //if it can move then the grid will update itself
-        else {
-            if (bthere == true) {
-                return 1;
-            }
-            else if (wthere == true) {
-                return 0;
-            }
-            else {
-                return 1;
-            }
-        }
-        break;
-    case 12:
-        //is a king
-        k.posassign(row, col, nrow, ncol);
-        //if not nothing happens and the user can try again although am having issues with updating currow
-        if (!k.movement()) {
-            clkco = 0;
-            return 0;
-        }
-        //if it can move then the grid will update itself
-        else {
-            if (bthere == true) {
-                return 1;
-            }
-            else if (wthere == true) {
-                return 0;
-            }
-            else {
-                return 1;
-            }
-        }
-        break;
-    }
-
     return 0;
 }
+
