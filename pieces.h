@@ -26,22 +26,22 @@ enum Tile_color {
 
 class Piece {
 
-    protected:
-        std::pair<int, int> cur_pos;
-        PieceType type;
-        PieceColor colour;
-    public:
-        Piece(int x, int y, PieceColor colour, PieceType type) : cur_pos(x, y), type(type), colour(colour) {};
-        std::pair<int, int> get_pos();
-        PieceType get_type();
-        PieceColor get_colour();
-        void set_pos(int x, int y);
-        virtual bool check_movement(int x, int y) = 0;
-        virtual ~Piece() {};
+protected:
+    std::pair<int, int> cur_pos;
+    PieceType type;
+    PieceColor colour;
+public:
+    Piece(int x, int y, PieceColor colour, PieceType type) : cur_pos(x, y), type(type), colour(colour) {};
+    std::pair<int, int> get_pos();
+    PieceType get_type();
+    PieceColor get_colour();
+    void set_pos(int x, int y);
+    virtual bool check_movement(int x, int y) = 0;
+    virtual ~Piece() {};
 };
 
 class BoardAware : public Piece {
-    public:
+public:
     BoardAware(int x, int y, PieceColor colour, PieceType type) : Piece(x, y, colour, type) {};
 
     // Override both methods properly
@@ -52,40 +52,40 @@ class BoardAware : public Piece {
     virtual bool check_movement(int x, int y, chessboard* brd) = 0;
 };
 
-class Pawn : public Piece {
-    public:
-        Pawn(int x, int y, PieceColor colour) : Piece(x, y,colour, PieceType::PAWN) {};
-        bool check_movement(int x, int y) override;
-};  
+class Pawn : public BoardAware {
+public:
+    Pawn(int x, int y, PieceColor colour) : BoardAware(x, y, colour, PieceType::PAWN) {};
+    bool check_movement(int x, int y, chessboard* brd) override;
+};
 
-class Rook : public BoardAware{
-    public:
-        Rook(int x, int y, PieceColor colour) : BoardAware(x, y,colour, PieceType::ROOK) {};
-        bool check_movement(int x, int y,chessboard* brd) override;
+class Rook : public BoardAware {
+public:
+    Rook(int x, int y, PieceColor colour) : BoardAware(x, y, colour, PieceType::ROOK) {};
+    bool check_movement(int x, int y, chessboard* brd) override;
 };
 
 class Knight : public Piece {
-    public:
-        Knight(int x, int y, PieceColor colour) : Piece(x, y,colour, PieceType::KNIGHT) {};
-        bool check_movement(int x, int y) override;
+public:
+    Knight(int x, int y, PieceColor colour) : Piece(x, y, colour, PieceType::KNIGHT) {};
+    bool check_movement(int x, int y) override;
 };
 
 class Queen : public BoardAware {
-    public:
-        Queen(int x, int y, PieceColor colour) : BoardAware(x, y,colour, PieceType::QUEEN) {};
-        bool check_movement(int x, int y,chessboard* brd) override;
-};  
+public:
+    Queen(int x, int y, PieceColor colour) : BoardAware(x, y, colour, PieceType::QUEEN) {};
+    bool check_movement(int x, int y, chessboard* brd) override;
+};
 
 class Bishop : public BoardAware {
-    public:
-        Bishop(int x, int y, PieceColor colour) : BoardAware(x, y,colour, PieceType::BISHOP) {};
-        bool check_movement(int x, int y,chessboard* brd) override;
-};  
+public:
+    Bishop(int x, int y, PieceColor colour) : BoardAware(x, y, colour, PieceType::BISHOP) {};
+    bool check_movement(int x, int y, chessboard* brd) override;
+};
 
 class King : public Piece {
-    public:
-        King(int x, int y, PieceColor colour) : Piece(x, y,colour, PieceType::KING) {};
-        bool check_movement(int x, int y) override;
+public:
+    King(int x, int y, PieceColor colour) : Piece(x, y, colour, PieceType::KING) {};
+    bool check_movement(int x, int y) override;
 };
 
 /*class Pawn

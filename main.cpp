@@ -4,8 +4,8 @@
 int main()
 {
     std::string input;
-    int row,col,nrow,ncol,countr = 0;
-    
+    int row, col, nrow, ncol, countr = 0;
+
     bool gameover = false;
     bool wplaying = true;
     bool bplaying = false;
@@ -15,7 +15,8 @@ int main()
 
     while (!gameover)
     {
-        w.printBoard();
+        system("cls");
+        w.printBoard(wplaying ,bplaying);
         if (wplaying) {
             std::cout << "\n\n\n\n\n\nWhite's turn\n";
         }
@@ -24,7 +25,7 @@ int main()
         };
 
         invalid_move = true;
-        
+
         while (invalid_move == true) {
             std::cout << "\n\n\n\n\n\nMove From: ";
             std::cin >> input;
@@ -35,14 +36,33 @@ int main()
             std::cout << "\n\n\n\n\n\n";
             nrow = input[1] - '1';
             ncol = input[0] - 'A';
-            
-            //bool takecheck = w.cantake(w,wplaying,bplaying);
-            if (/*(w.arr[nrow][ncol] == 0 and takecheck == true) or*/ (w.grid_pressed(row, col, nrow, ncol, wplaying, bplaying) == 0 )) {
+            if (row < 0 || row>7 || col < 0 || col>7 || nrow < 0 || nrow>7 || ncol < 0 || ncol>7) {
+                std::cout << "invalid move\n";
+                std::cout << "letters must be cap, sorry shit code ";
+                invalid_move = true;
+                continue;
+            }
+         //   std::cout << "Before cantake check" << std::endl;
+            int takecheck = w.cantake(wplaying, bplaying);
+         //   std::cout << "After cantake check: " << takecheck << std::endl;
+
+            bool mustcapture = (takecheck == 1); // If 1 means captures are available
+
+            // Check if this move is a capture when captures are available
+            bool iscapturing = (w.arr[nrow][ncol] != nullptr &&
+                ((wplaying && w.arr[nrow][ncol]->get_colour() == BLACK) ||
+                    (bplaying && w.arr[nrow][ncol]->get_colour() == WHITE)));
+
+            if (mustcapture && !iscapturing) {
+                std::cout << "Capture is available! You must capture when possible.";
+                invalid_move = true;
+            }
+            else if (w.grid_pressed(row, col, nrow, ncol, wplaying, bplaying) == 0) {
                 std::cout << "Invalid Move!";
                 invalid_move = true;
             }
             else {
-                
+
                 invalid_move = false;
                 //switching between players
                 if (wplaying == true) {
@@ -54,7 +74,7 @@ int main()
                     bplaying = false;
                 }
             }
-                //checking if the game is over by elimination
+            //checking if the game is over by elimination
             if (w.is_black_gone() == true) {
                 std::cout << "Black Wins!";
                 gameover = true;
@@ -64,15 +84,15 @@ int main()
                 gameover = true;
             }
             //need to make auto pass thing, leave to me for now but checks bishop correct
-            else if(w.piece_is_taken() == true){
-                std::cout<<"draw";
+            else if (w.piece_is_taken() == true or w.nomoves(wplaying,bplaying)==1) {
+                std::cout << "Draw";
                 gameover = true;
+            }
         }
+
+
+
     }
-   
-    
-    
-} 
 
     return 0;
 }

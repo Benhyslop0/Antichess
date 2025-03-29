@@ -19,254 +19,191 @@ PieceColor Piece::get_colour() {
     return colour;
 }
 
-bool Pawn::check_movement(int x, int y) {
-    if(colour == WHITE){
-        if(cur_pos.first == 6){
-            if(x == cur_pos.first - 1 || x == cur_pos.first - 2){
-                
+bool Pawn::check_movement(int x, int y, chessboard* brd) {
+  //  std::cout << "check move";
+    if (colour == WHITE) {
+        if (y == cur_pos.second && brd->arr[x][y] == nullptr) {
+            if (x == cur_pos.first - 1) {
                 return true;
             }
-            else{
-                
-                return false;
+            if (cur_pos.first == 6 && x == cur_pos.first - 2 && brd->arr[cur_pos.first - 1][y] == nullptr) {
+                return true;
             }
         }
-        else{
-            if(x == cur_pos.first - 1){
+        else if (x == cur_pos.first - 1 && (y == cur_pos.second - 1 || y == cur_pos.second + 1)) {
+            if (brd->arr[x][y] != nullptr && brd->arr[x][y]->get_colour() == BLACK) {
                 return true;
-            }
-            else{
-                return false;
             }
         }
     }
-    else{
-        if(cur_pos.first == 1){
-            if(x == cur_pos.first + 1 || x == cur_pos.first + 2){
-                
+    if (colour == BLACK) {
+        if (y == cur_pos.second && brd->arr[x][y] == nullptr) {
+            if (x == cur_pos.first + 1) {
                 return true;
             }
-            else{
-                std::cout << x;
-                return false;
-            }
-        }
-        else{
-            if(x == cur_pos.first + 1){
-                
+            if (cur_pos.first == 1 && x == cur_pos.first + 2 && brd->arr[cur_pos.first + 1][y] == nullptr) {
                 return true;
             }
-            else{
-                return false;
-            }
         }
-    }
-}
-
-bool Rook::check_movement(int wantrow, int wantcol,chessboard* brd) {
-    for (int i = 1; i <= 7; i++) {
-        //left
-        if (cur_pos.first == wantrow && cur_pos.second == wantcol + i) {
-            for (int j = 0; j < i; j++) {
-                Piece* pos = brd->arr[cur_pos.first][cur_pos.second - j];
-                if (pos != nullptr) {
-                    return false;
-                }
+        else if (x == cur_pos.first + 1 && (y == cur_pos.second + 1 || y == cur_pos.second - 1)) {
+            if (brd->arr[x][y] != nullptr && brd->arr[x][y]->get_colour() == WHITE) {
+                return true;
             }
-            return true;
-        }
-        // right
-        else if (cur_pos.first == wantrow && cur_pos.second == wantcol - i) {
-            for (int j = 0; j < i; j++) {
-                Piece* pos = brd->arr[cur_pos.first][cur_pos.second + j];
-                if (pos != nullptr) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        //up
-        else if (cur_pos.first == wantrow + i && cur_pos.second == wantcol) {
-            for (int j = 1; j < i; j++) {
-                Piece* pos = brd->arr[cur_pos.first - j][cur_pos.second];
-                std::cout << pos;
-                if (pos != nullptr) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        //down
-        else if (cur_pos.first == wantrow - i && cur_pos.second == wantcol) {
-            for (int j = 0; j < i; j++) {
-                Piece* pos = brd->arr[cur_pos.first + j][cur_pos.second];
-                if (pos != nullptr ) {
-                    return false;
-                }
-            }
-            return true;
         }
     }
     return false;
 }
 
-bool Knight::check_movement(int x, int y) {
-    if (cur_pos.first == x + 2 && cur_pos.second == y + 1) {
-        return true;
-    }
-    else if (cur_pos.first == x + 2 && cur_pos.second == y - 1) {
-        return true;
-    }
-    else if (cur_pos.first == x - 2 && cur_pos.second == y + 1) {
-        return true;
-    }
-    else if (cur_pos.first == x - 2 && cur_pos.second == y - 1) {
-        return true;
-    }
-    else if (cur_pos.first == x + 1 && cur_pos.second == y + 2) {
-        return true;
-    }
-    else if (cur_pos.first == x + 1 && cur_pos.second == y - 2) {
-        return true;
-    }
-    else if (cur_pos.first == x - 1 && cur_pos.second == y + 2) {
-        return true;
-    }
-    else if (cur_pos.first == x - 1 && cur_pos.second == y - 2) {
-        return true;
-    }
-    else {
+bool Rook::check_movement(int wantrow, int wantcol, chessboard* brd) {
+ //   std::cout << "in ROOK check move";
+    int start;
+    int end;
+    if (cur_pos.first != wantrow and cur_pos.second != wantcol) {
         return false;
     }
+
+
+
+
+    if (cur_pos.first == wantrow) {
+        if (cur_pos.second < wantcol) {
+            start = cur_pos.second + 1;
+            end = wantcol;
+        }
+        else {
+            start = wantcol + 1;
+            end = cur_pos.second;
+        }
+        for (int i = start; i < end; i++) {
+            if (brd->arr[cur_pos.first][i] != nullptr) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
+
+    if (cur_pos.second == wantcol) { 
+        if (cur_pos.first < wantrow) { 
+            start = cur_pos.first + 1; // found the issue here. Now starts checking the row infront of it
+            end = wantrow;
+        } 
+        else { 
+            start = wantrow + 1;
+            end = cur_pos.first;
+        } 
+    
+        for (int i = start; i < end; i++) { 
+            if (brd->arr[i][cur_pos.second] != nullptr) { 
+                return false;
+            }
+        }
+        return true;
+    }
+
+    return false;
+
+
 }
 
-bool Queen::check_movement(int wantrow, int wantcol,chessboard* brd) {
-    for (int i = 0; i <= 7; i++) {
-        //left
-        if (cur_pos.first == wantrow && cur_pos.second == wantcol + i) {
-            for (int j = 1; j < i; j++) {
-                Piece* pos = brd->arr[cur_pos.first][cur_pos.second - j];
-                if (pos != nullptr) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        // right
-        else if (cur_pos.first == wantrow && cur_pos.second == wantcol - i) {
-            for (int j = 1; j < i; j++) {
-                Piece* pos = brd->arr[cur_pos.first][cur_pos.second + j];
-                if (pos != nullptr) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        //up
-        else if (cur_pos.first == wantrow + i && cur_pos.second == wantcol) {
-            for (int j = 1; j < i; j++) {
-                Piece* pos = brd->arr[cur_pos.first - j][cur_pos.second];
-                if (pos != nullptr) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        //down
-        else if (cur_pos.first == wantrow - i && cur_pos.second == wantcol) {
-            for (int j = 1; j < i; j++) {
-                Piece* pos = brd->arr[cur_pos.first + j][cur_pos.second];
-                if (pos != nullptr) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        else if (cur_pos.first == wantrow + i && cur_pos.second == wantcol + i) {
-            for (int j = 1; j < i; j++) {
-                Piece* pos = brd->arr[cur_pos.first - j][cur_pos.second - j];
-                if (pos != nullptr) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        else if (cur_pos.first == wantrow + i && cur_pos.second == wantcol - i) {
-            for (int j = 1; j < i; j++) {
-                Piece* pos = brd->arr[cur_pos.first - j][cur_pos.second + j];
-                if (pos != nullptr) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        else if (cur_pos.first == wantrow - i && cur_pos.second == wantcol + i) {
-            for (int j = 1; j < i; j++) {
-                Piece* pos = brd->arr[cur_pos.first + j][cur_pos.second - j];
-                if (pos != nullptr) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        else if (cur_pos.first == wantrow - i && cur_pos.second == wantcol - i) {
-            for (int j = 1; j < i; j++) {
-                Piece* pos = brd->arr[cur_pos.first + j][cur_pos.second + j];
-                if (pos != nullptr) {
-                    return false;
-                }
-            }
-            return true;
-        }
+bool Knight::check_movement(int wantrow, int wantcol) {
 
+    int rowdiff = abs(cur_pos.first - wantrow);
+    int coldiff = abs(cur_pos.second - wantcol);
+    return ((rowdiff == 1 and coldiff == 2) or (rowdiff == 2 and coldiff == 1));
+}
+    
+
+int dir(int x) {
+    if (x > 0) {
+        return 1;
+    }
+    if (x == 0) {
+        return 0;
+    }
+    if (x < 0) {
+        return -1;
+    }
+}
+
+
+bool Queen::check_movement(int wantrow, int wantcol, chessboard* brd) {
+    int start;
+    int end;
+    if (cur_pos.first == wantrow) {
+        if (cur_pos.second < wantcol) {
+            start = cur_pos.second + 1;
+            end = wantcol;
+        }
+        else {
+            start = wantcol + 1;
+            end = cur_pos.second;
+        }
+        for (int i = start; i < end; i++) {
+            if (brd->arr[cur_pos.first][i] != nullptr) {
+                return false;
+            }
+        }
+        return true;
+    }
+    if (cur_pos.second == wantcol) { 
+        if (cur_pos.first < wantrow) { 
+            start = cur_pos.first + 1; // found the issue here. Now starts checking the row infront of it
+            end = wantrow;
+        } 
+        else { 
+            start = wantrow + 1;
+            end = cur_pos.first;
+        } 
+    
+        for (int i = start; i < end; i++) { 
+            if (brd->arr[i][cur_pos.second] != nullptr) { 
+                return false;
+            }
+        }
+        return true;
+    }
+    int drow = wantrow - cur_pos.first;
+    int dcol = wantcol - cur_pos.second;
+    if (abs(drow) == abs(dcol)) {
+        int rowdir = dir(drow);
+        int coldir = dir(dcol);
+
+        for (int i = 1; i < abs(drow); i++) {
+            int rowcheck = cur_pos.first + (i * rowdir);
+            int colcheck = cur_pos.second + (i * coldir);
+            if (brd->arr[rowcheck][colcheck] != nullptr) {
+                return false;
+            }
+        }
+        return true;
     }
     return false;
 }
 
-bool Bishop::check_movement(int wantrow, int wantcol,chessboard* brd) {
-    for (int i = 0; i <= 7; i++) {
 
-        if (cur_pos.first == wantrow + i && cur_pos.second == wantcol + i) {
-            for (int j = 1; j < i; j++) {
-                Piece* pos = brd->arr[cur_pos.first - j][cur_pos.second - j];
-                if (pos != nullptr) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        else if (cur_pos.first == wantrow + i && cur_pos.second == wantcol - i) {
-            for (int j = 1; j < i; j++) {
-                Piece* pos = brd->arr[cur_pos.first - j][cur_pos.second + j];
-                if (pos != nullptr) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        else if (cur_pos.first == wantrow - i && cur_pos.second == wantcol + i) {
-            for (int j = 1; j < i; j++) {
-                Piece* pos = brd->arr[cur_pos.first + j][cur_pos.second - j];
-                if (pos != nullptr) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        else if (cur_pos.first == wantrow - i && cur_pos.second == wantcol - i) {
-            for (int j = 1; j < i; j++) {
-                Piece* pos = brd->arr[cur_pos.first + j][cur_pos.second + j];
-                if (pos != nullptr) {
-                    return false;
-                }
-            }
-            return true;
+bool Bishop::check_movement(int wantrow, int wantcol, chessboard* brd) {
+    int drow = wantrow - cur_pos.first;
+    int dcol = wantcol - cur_pos.second;
+    if (abs(drow) != abs(dcol)) {
+        return false;
+    }
+    int rowdir = dir(drow);
+    int coldir = dir(dcol);
+    for (int i = 1; i < abs(drow); i++) {
+        int rowcheck = cur_pos.first + (i * rowdir);
+        int colcheck = cur_pos.second + (i * coldir);
+        if (brd->arr[rowcheck][colcheck] != nullptr) {
+            return false;
         }
     }
-    return false;
+    return true;
 }
 
 bool King::check_movement(int wantrow, int wantcol) {
+//    std::cout << "in KI check move";
     if (cur_pos.first == wantrow && cur_pos.second == wantcol + 1) {
         return true;
     }
@@ -296,366 +233,3 @@ bool King::check_movement(int wantrow, int wantcol) {
     }
 }
 
-/*Pawn::Pawn() {};
-//assigning values based on the pawns possition
-void Pawn::posassign(int cx, int cy, int nx, int ny) {
-    currow = cx;
-    curcol = cy;
-    wantrow = nx;
-    wantcol = ny;
-}
-//boolean function so the pawn itself is checking if it can move
-bool Pawn::movement(int piecenum) {
-
-
-    switch (piecenum) {
-
-        // Black Pawn
-    case 6:
-        if (currow == 1) {
-            if (wantrow == currow + 2 || wantrow == currow + 1) {
-                return true;
-            }
-            else {
-
-                return false;
-            }
-        }
-        else {
-            if (wantrow == currow + 1) {
-                return true;
-            }
-            else {
-
-                return false;
-            }
-        }
-        break;
-
-        // White Pawn
-    case 7:
-        if (currow == 6) {
-            if (wantrow == currow - 2 || wantrow == currow - 1) {
-                return true;
-            }
-            else {
-
-                return false;
-            }
-        }
-        else {
-            if (wantrow == currow - 1) {
-                return true;
-            }
-            else {
-
-                return false;
-            }
-        }
-        break;
-    }
-    return true;
-}
-
-bool Pawn::row(int row) {
-    if (row == 0 || row == 7) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-
-King::King() {};
-bool King::movement() {
-    if (currow == wantrow && curcol == wantcol + 1) {
-        return true;
-    }
-    else if (currow == wantrow && curcol == wantcol - 1) {
-        return true;
-    }
-    else if (currow == wantrow + 1 && curcol == wantcol) {
-        return true;
-    }
-    else if (currow == wantrow - 1 && curcol == wantcol) {
-        return true;
-    }
-    else if (currow == wantrow + 1 && curcol == wantcol + 1) {
-        return true;
-    }
-    else if (currow == wantrow + 1 && curcol == wantcol - 1) {
-        return true;
-    }
-    else if (currow == wantrow - 1 && curcol == wantcol + 1) {
-        return true;
-    }
-    else if (currow == wantrow - 1 && curcol == wantcol - 1) {
-        return true;
-    }
-    else {
-        return false;
-    }
-
-}
-void King::posassign(int cx, int cy, int nx, int ny) {
-    currow = cx;
-    curcol = cy;
-    wantrow = nx;
-    wantcol = ny;
-}
-
-
-Queen::Queen() {};
-
-bool Queen::movement(chessboard brd)
-{
-    for (int i = 0; i <= 7; i++) {
-        //left
-        if (currow == wantrow && curcol == wantcol + i) {
-            for (int j = 1; j < i; j++) {
-                int pos = brd.arr[currow][curcol - j];
-                if (pos > 0) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        // right
-        else if (currow == wantrow && curcol == wantcol - i) {
-            for (int j = 1; j < i; j++) {
-                int pos = brd.arr[currow][curcol + j];
-                if (pos > 0) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        //up
-        else if (currow == wantrow + i && curcol == wantcol) {
-            for (int j = 1; j < i; j++) {
-                int pos = brd.arr[currow - j][curcol];
-                if (pos > 0) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        //down
-        else if (currow == wantrow - i && curcol == wantcol) {
-            for (int j = 1; j < i; j++) {
-                int pos = brd.arr[currow + j][curcol];
-                if (pos > 0) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        else if (currow == wantrow + i && curcol == wantcol + i) {
-            for (int j = 1; j < i; j++) {
-                int pos = brd.arr[currow - j][curcol - j];
-                if (pos > 0) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        else if (currow == wantrow + i && curcol == wantcol - i) {
-            for (int j = 1; j < i; j++) {
-                int pos = brd.arr[currow - j][curcol + j];
-                if (pos > 0) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        else if (currow == wantrow - i && curcol == wantcol + i) {
-            for (int j = 1; j < i; j++) {
-                int pos = brd.arr[currow + j][curcol - j];
-                if (pos > 0) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        else if (currow == wantrow - i && curcol == wantcol - i) {
-            for (int j = 1; j < i; j++) {
-                int pos = brd.arr[currow + j][curcol + j];
-                if (pos > 0) {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-    }
-    return false;
-
-
-}
-
-void Queen::posassign(int cx, int cy, int nx, int ny)
-{
-    currow = cx;
-    curcol = cy;
-    wantrow = nx;
-    wantcol = ny;
-}
-
-
-
-
-
-Rook::Rook() {}
-
-
-bool Rook::movement(chessboard brd)
-{
-    for (int i = 1; i <= 7; i++) {
-        //left
-        if (currow == wantrow && curcol == wantcol + i) {
-            for (int j = 1; j < i; j++) {
-                int pos = brd.arr[currow][curcol - j];
-                if (pos > 0) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        // right
-        else if (currow == wantrow && curcol == wantcol - i) {
-            for (int j = 1; j < i; j++) {
-                int pos = brd.arr[currow][curcol + j];
-                if (pos > 0) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        //up
-        else if (currow == wantrow + i && curcol == wantcol) {
-            for (int j = 1; j < i; j++) {
-                int pos = brd.arr[currow - j][curcol];
-                if (pos > 0) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        //down
-        else if (currow == wantrow - i && curcol == wantcol) {
-            for (int j = 1; j < i; j++) {
-                int pos = brd.arr[currow + j][curcol];
-                if (pos > 0) {
-                    return false;
-                }
-            }
-            return true;
-        }
-    }
-    return false;
-}
-
-
-
-void Rook::posassign(int cx, int cy, int nx, int ny)
-{
-    currow = cx;
-    curcol = cy;
-    wantrow = nx;
-    wantcol = ny;
-};
-
-Bishop::Bishop() {}
-bool Bishop::movement(chessboard brd)
-{
-    for (int i = 0; i <= 7; i++) {
-
-        if (currow == wantrow + i && curcol == wantcol + i) {
-            for (int j = 1; j < i; j++) {
-                int pos = brd.arr[currow - j][curcol - j];
-                if (pos > 0) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        else if (currow == wantrow + i && curcol == wantcol - i) {
-            for (int j = 1; j < i; j++) {
-                int pos = brd.arr[currow - j][curcol + j];
-                if (pos > 0) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        else if (currow == wantrow - i && curcol == wantcol + i) {
-            for (int j = 1; j < i; j++) {
-                int pos = brd.arr[currow + j][curcol - j];
-                if (pos > 0) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        else if (currow == wantrow - i && curcol == wantcol - i) {
-            for (int j = 1; j < i; j++) {
-                int pos = brd.arr[currow + j][curcol + j];
-                if (pos > 0) {
-                    return false;
-                }
-            }
-            return true;
-        }
-    }
-    return false;
-};
-
-void Bishop::posassign(int cx, int cy, int nx, int ny)
-{
-    currow = cx;
-    curcol = cy;
-    wantrow = nx;
-    wantcol = ny;
-}
-
-
-Knight::Knight() {
-}
-void Knight::posassign(int cx, int cy, int nx, int ny) {
-    currow = cx;
-    curcol = cy;
-    wantrow = nx;
-    wantcol = ny;
-}
-
-bool Knight::movement() {
-    if (wantrow == currow + 2 && wantcol == curcol + 1) {
-        return true;
-    }
-    else if (wantrow == currow + 2 && wantcol == curcol - 1) {
-        return true;
-    }
-    else if (wantrow == currow - 2 && wantcol == curcol + 1) {
-        return true;
-    }
-    else if (wantrow == currow - 2 && wantcol == curcol - 1) {
-        return true;
-    }
-    else if (wantrow == currow + 1 && wantcol == curcol + 2) {
-        return true;
-    }
-    else if (wantrow == currow + 1 && wantcol == curcol - 2) {
-        return true;
-    }
-    else if (wantrow == currow - 1 && wantcol == curcol + 2) {
-        return true;
-    }
-    else if (wantrow == currow - 1 && wantcol == curcol - 2) {
-        return true;
-    }
-    else {
-        return false;
-    }
-
-}*/
