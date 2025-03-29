@@ -85,17 +85,18 @@ bool Rook::check_movement(int wantrow, int wantcol, chessboard* brd) {
 
 
 
-    if (cur_pos.second == wantcol) {
-        if (cur_pos.first < wantrow) {
-            start = cur_pos.first;
+   if (cur_pos.second == wantcol) { 
+        if (cur_pos.first < wantrow) { 
+            start = cur_pos.first + 1; // found the issue here. Now starts checking the row infront of it
             end = wantrow;
-        }
-        else {
+        } 
+        else { 
             start = wantrow + 1;
             end = cur_pos.first;
-        }
-        for (int i = start; i < end; i++) {
-            if (brd->arr[i][cur_pos.second] != nullptr) {
+        } 
+    
+        for (int i = start; i < end; i++) { 
+            if (brd->arr[i][cur_pos.second] != nullptr) { 
                 return false;
             }
         }
@@ -178,17 +179,18 @@ bool Queen::check_movement(int wantrow, int wantcol, chessboard* brd) {
         }
         return true;
     }
-    if (cur_pos.second == wantcol) {
-        if (cur_pos.first < wantrow) {
-            start = cur_pos.first + 1;
+    if (cur_pos.second == wantcol) { 
+        if (cur_pos.first < wantrow) { 
+            start = cur_pos.first + 1; // found the issue here. Now starts checking the row infront of it
             end = wantrow;
-        }
-        else {
+        } 
+        else { 
             start = wantrow + 1;
             end = cur_pos.first;
-        }
-        for (int i = start; i < end; i++) {
-            if (brd->arr[i][cur_pos.second] != nullptr) {
+        } 
+    
+        for (int i = start; i < end; i++) { 
+            if (brd->arr[i][cur_pos.second] != nullptr) { 
                 return false;
             }
         }
