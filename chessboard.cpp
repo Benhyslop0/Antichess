@@ -9,7 +9,7 @@
 //checking for what piece has been clicked
 
 int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying, bool bplaying) {
-    //std::cout << "in gridpressed";
+    std::cout << "in gridpressed";
     Piece* piece = arr[row][col];
     if (piece == nullptr) {
         return 0;
@@ -34,7 +34,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
         //std::cout << "Not your piece!";
         return 0;
     }
-
+    std::cout << "in gridpressed2";
     BoardAware* boardAwarePiece = nullptr; // need to make here so its in the scope of the switch statement
     //checking black
     if (colour == BLACK) {
@@ -295,7 +295,9 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
                             }
                         }
                     }
+                    std::cout << "in pawn else statement";
                     updated_grid(row, col, nrow, ncol, piece, pos);
+                    
                     return 1;
                 }
 
@@ -438,13 +440,16 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
     return 1;
 }
 int chessboard::updated_grid(int rowold, int colold, int rownew, int colnew, Piece* piece, PieceType type) {
+    std::cout << "in updated grid";
     PieceColor pieceColor = piece->get_colour();
     delete arr[rowold][colold];
     arr[rowold][colold] = nullptr;
     delete arr[rownew][colnew];
+    std::cout << "in updated grid2";
     switch (type) {
     case PAWN:
         arr[rownew][colnew] = new Pawn(rownew, colnew, pieceColor);
+        std::cout << "in updated grid3";
         break;
     case ROOK:
         arr[rownew][colnew] = new Rook(rownew, colnew, pieceColor);
@@ -668,6 +673,7 @@ bool chessboard::piece_is_taken(PieceType piecenum, PieceColor colour, Tile_colo
     else {
         return false;
     }
+
 }
 
 bool chessboard::is_white_gone() {
@@ -691,53 +697,65 @@ bool chessboard::is_black_gone() {
 
 
 int chessboard::nomoves(bool wplaying, bool bplaying) {
-    Piece* piece;
-    if (bplaying) {
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 7; j++) {
-                if ((this->arr[i][j]->get_colour() == BLACK) and (this->arr[i][j]->get_type() == PAWN)) {
-                    piece = this->arr[i][j];
-                    if (piece->check_movement(piece -> get_pos().first,piece -> get_pos().second+1)) {
-                        return 0;
-                    }
-                    if (piece->check_movement(piece->get_pos().first+1, piece->get_pos().second + 1)) {
-                        return 0;
-                    }
-                    if (piece->check_movement(piece->get_pos().first-1, piece->get_pos().second + 1)) {
-                        return 0;
+    BoardAware* piece;
+    int row1, col;
+
+        if (bplaying) {
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    if (this->arr[i][j] != nullptr && this->arr[i][j]->get_colour() == BLACK && this->arr[i][j]->get_type() == PAWN) {
+                        //first had to cast to board aware to get the position of the piece
+                        //may have took hours to realise the board pieces are of the pieces class and need casted into the board aware class
+                        piece = dynamic_cast<BoardAware*>(this->arr[i][j]);
+                        row1 = piece->get_pos().first+1;
+                        col = piece->get_pos().second;
+                        //also since pawn check movemnet expects a pointer to the board class i had to pass "this" in
+                        if (piece->check_movement(row1, col, this)) {
+                            return 0;
+                        }
+                        if (piece->check_movement(row1, col + 1, this)) {
+                            return 0;
+                        }
+                        if (piece->check_movement(row1, col - 1, this)) {
+                            return 0;
+                        }
                     }
                 }
-
-
             }
+            return 1;
         }
-    }
-    if (wplaying) {
-        for (int i = 0; i < 7; i++) {
-            for (int j = 0; j < 7; j++) {
-                if ((this->arr[i][j]->get_colour() == WHITE) and (this->arr[i][j]->get_type() == PAWN)) {
-                    piece = this->arr[i][j];
-                    if (piece->check_movement(piece->get_pos().first, piece->get_pos().second -1)) {
-                        return 0;
-                    }
-                    if (piece->check_movement(piece->get_pos().first - 1, piece->get_pos().second - 1)) {
-                        return 0;
-                    }
-                    if (piece->check_movement(piece->get_pos().first + 1, piece->get_pos().second - 1)) {
-                        return 0;
+
+        if (wplaying) {
+            //same changes as in black
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    if (this->arr[i][j] != nullptr && this->arr[i][j]->get_colour() == WHITE && this->arr[i][j]->get_type() == PAWN) {
+                        piece = dynamic_cast<BoardAware*>(this->arr[i][j]);
+                        row1 = piece->get_pos().first -1;
+                         
+                        col = piece->get_pos().second;
+
+                        if (piece->check_movement(row1, col, this)) {
+                            return 0;
+                        }
+                        if (piece->check_movement(row1, col + 1, this)) {
+                            return 0;
+                        }
+                        if (piece->check_movement(row1, col - 1, this)) {
+                            return 0;
+                        }
                     }
                 }
-
-
             }
         }
-    }
-    return 1;
+        return 1;
 }
 
 int chessboard::cantake(bool wplaying, bool bplaying) {
+    std::cout << "in cantake";
     std::vector<Piece*> wpieces;
     std::vector<Piece*> bpieces;
+    std::cout << "in cantake2";
     for (int i = 0; i < 7; i++) {
         for (int j = 0; j < 7; j++) {
             if (this->arr[i][j] != nullptr) {
