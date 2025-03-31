@@ -41,9 +41,11 @@ public:
 
     int grid_pressed(int row, int col, int nrow, int ncol, bool wplaying, bool bplaying);
     int updated_grid(int rowold, int colold, int rownew, int colnew, Piece* piece, PieceType type);
-    void printBoard();
+    void printBoard(bool wplaying, bool bplaying);
     bool is_white_gone();
     bool is_black_gone();
+
+    int nomoves(bool wplaying, bool bplaying);
 
     int cantake(bool wplaying, bool bplaying);
 
