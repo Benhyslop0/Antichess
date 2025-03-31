@@ -20,7 +20,7 @@ PieceColor Piece::get_colour() {
 }
 
 bool Pawn::check_movement(int x, int y, chessboard* brd) {
-    std::cout << "check move";
+    //  std::cout << "check move";
     if (colour == WHITE) {
         if (y == cur_pos.second && brd->arr[x][y] == nullptr) {
             if (x == cur_pos.first - 1) {
@@ -29,7 +29,7 @@ bool Pawn::check_movement(int x, int y, chessboard* brd) {
             if (cur_pos.first == 6 && x == cur_pos.first - 2 && brd->arr[cur_pos.first - 1][y] == nullptr) {
                 return true;
             }
-        }       
+        }
         else if (x == cur_pos.first - 1 && (y == cur_pos.second - 1 || y == cur_pos.second + 1)) {
             if (brd->arr[x][y] != nullptr && brd->arr[x][y]->get_colour() == BLACK) {
                 return true;
@@ -55,7 +55,7 @@ bool Pawn::check_movement(int x, int y, chessboard* brd) {
 }
 
 bool Rook::check_movement(int wantrow, int wantcol, chessboard* brd) {
-    std::cout << "in ROOK check move";
+    //   std::cout << "in ROOK check move";
     int start;
     int end;
     if (cur_pos.first != wantrow and cur_pos.second != wantcol) {
@@ -67,14 +67,14 @@ bool Rook::check_movement(int wantrow, int wantcol, chessboard* brd) {
 
     if (cur_pos.first == wantrow) {
         if (cur_pos.second < wantcol) {
-            start = cur_pos.second+1;
+            start = cur_pos.second + 1;
             end = wantcol;
         }
         else {
-           start = wantcol+1;
+            start = wantcol + 1;
             end = cur_pos.second;
         }
-        for (int i =start ; i < end ; i++) {
+        for (int i = start; i < end; i++) {
             if (brd->arr[cur_pos.first][i] != nullptr) {
                 return false;
             }
@@ -87,13 +87,14 @@ bool Rook::check_movement(int wantrow, int wantcol, chessboard* brd) {
 
     if (cur_pos.second == wantcol) {
         if (cur_pos.first < wantrow) {
-            start = cur_pos.first;
+            start = cur_pos.first + 1; // found the issue here. Now starts checking the row infront of it
             end = wantrow;
         }
         else {
-            start = wantrow+1;
+            start = wantrow + 1;
             end = cur_pos.first;
         }
+
         for (int i = start; i < end; i++) {
             if (brd->arr[i][cur_pos.second] != nullptr) {
                 return false;
@@ -107,47 +108,13 @@ bool Rook::check_movement(int wantrow, int wantcol, chessboard* brd) {
 
 }
 
-bool Knight::check_movement(int x, int y) {
+bool Knight::check_movement(int wantrow, int wantcol) {
 
-
-
-    
-/*
-
-int rowdiff = abs(cur_row.first-wantrow);
-intcoldiff= abs(cur_pos.second-wantcol);
-return ((rowdiff==1 and coldiff== 2) or (rowdiff==2 and coldiff==1))
-
-*/
-    std::cout << "in KN check move";
-    if (cur_pos.first == x + 2 && cur_pos.second == y + 1) {
-        return true;
-    }
-    else if (cur_pos.first == x + 2 && cur_pos.second == y - 1) {
-        return true;
-    }
-    else if (cur_pos.first == x - 2 && cur_pos.second == y + 1) {
-        return true;
-    }
-    else if (cur_pos.first == x - 2 && cur_pos.second == y - 1) {
-        return true;
-    }
-    else if (cur_pos.first == x + 1 && cur_pos.second == y + 2) {
-        return true;
-    }
-    else if (cur_pos.first == x + 1 && cur_pos.second == y - 2) {
-        return true;
-    }
-    else if (cur_pos.first == x - 1 && cur_pos.second == y + 2) {
-        return true;
-    }
-    else if (cur_pos.first == x - 1 && cur_pos.second == y - 2) {
-        return true;
-    }
-    else {
-        return false;
-    }
+    int rowdiff = abs(cur_pos.first - wantrow);
+    int coldiff = abs(cur_pos.second - wantcol);
+    return ((rowdiff == 1 and coldiff == 2) or (rowdiff == 2 and coldiff == 1));
 }
+
 
 int dir(int x) {
     if (x > 0) {
@@ -160,6 +127,7 @@ int dir(int x) {
         return -1;
     }
 }
+
 
 bool Queen::check_movement(int wantrow, int wantcol, chessboard* brd) {
     int start;
@@ -182,13 +150,14 @@ bool Queen::check_movement(int wantrow, int wantcol, chessboard* brd) {
     }
     if (cur_pos.second == wantcol) {
         if (cur_pos.first < wantrow) {
-            start = cur_pos.first+1;
+            start = cur_pos.first + 1; // found the issue here. Now starts checking the row infront of it
             end = wantrow;
         }
         else {
             start = wantrow + 1;
             end = cur_pos.first;
         }
+
         for (int i = start; i < end; i++) {
             if (brd->arr[i][cur_pos.second] != nullptr) {
                 return false;
@@ -206,7 +175,7 @@ bool Queen::check_movement(int wantrow, int wantcol, chessboard* brd) {
             int rowcheck = cur_pos.first + (i * rowdir);
             int colcheck = cur_pos.second + (i * coldir);
             if (brd->arr[rowcheck][colcheck] != nullptr) {
-                return false; 
+                return false;
             }
         }
         return true;
@@ -216,11 +185,11 @@ bool Queen::check_movement(int wantrow, int wantcol, chessboard* brd) {
 
 
 bool Bishop::check_movement(int wantrow, int wantcol, chessboard* brd) {
-    int drow= wantrow- cur_pos.first;
-    int dcol= wantcol - cur_pos.second;
+    int drow = wantrow - cur_pos.first;
+    int dcol = wantcol - cur_pos.second;
     if (abs(drow) != abs(dcol)) {
         return false;
-    }    
+    }
     int rowdir = dir(drow);
     int coldir = dir(dcol);
     for (int i = 1; i < abs(drow); i++) {
@@ -234,32 +203,9 @@ bool Bishop::check_movement(int wantrow, int wantcol, chessboard* brd) {
 }
 
 bool King::check_movement(int wantrow, int wantcol) {
-    std::cout << "in KI check move";
-    if (cur_pos.first == wantrow && cur_pos.second == wantcol + 1) {
-        return true;
+        int drow = abs(cur_pos.first - wantrow);
+        int dcol = abs(cur_pos.second - wantcol);
+
+        // King can move exactly one square in any direction
+        return (drow == 1 and dcol == 1);
     }
-    else if (cur_pos.first == wantrow && cur_pos.second == wantcol - 1) {
-        return true;
-    }
-    else if (cur_pos.first == wantrow + 1 && cur_pos.second == wantcol) {
-        return true;
-    }
-    else if (cur_pos.first == wantrow - 1 && cur_pos.second == wantcol) {
-        return true;
-    }
-    else if (cur_pos.first == wantrow + 1 && cur_pos.second == wantcol + 1) {
-        return true;
-    }
-    else if (cur_pos.first == wantrow + 1 && cur_pos.second == wantcol - 1) {
-        return true;
-    }
-    else if (cur_pos.first == wantrow - 1 && cur_pos.second == wantcol + 1) {
-        return true;
-    }
-    else if (cur_pos.first == wantrow - 1 && cur_pos.second == wantcol - 1) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
