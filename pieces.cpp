@@ -20,7 +20,6 @@ PieceColor Piece::get_colour() {
 }
 
 bool Pawn::check_movement(int x, int y, chessboard* brd) {
-    //  std::cout << "check move";
     if (colour == WHITE) {
         if (y == cur_pos.second && brd->arr[x][y] == nullptr) {
             if (x == cur_pos.first - 1) {
@@ -55,7 +54,6 @@ bool Pawn::check_movement(int x, int y, chessboard* brd) {
 }
 
 bool Rook::check_movement(int wantrow, int wantcol, chessboard* brd) {
-    //   std::cout << "in ROOK check move";
     int start;
     int end;
     if (cur_pos.first != wantrow and cur_pos.second != wantcol) {
@@ -87,7 +85,7 @@ bool Rook::check_movement(int wantrow, int wantcol, chessboard* brd) {
 
     if (cur_pos.second == wantcol) {
         if (cur_pos.first < wantrow) {
-            start = cur_pos.first + 1; // found the issue here. Now starts checking the row infront of it
+            start = cur_pos.first + 1;
             end = wantrow;
         }
         else {
@@ -150,8 +148,7 @@ bool Queen::check_movement(int wantrow, int wantcol, chessboard* brd) {
     }
     if (cur_pos.second == wantcol) {
         if (cur_pos.first < wantrow) {
-            start = cur_pos.first + 1; // found the issue here. Now starts checking the row infront of it
-            end = wantrow;
+            start = cur_pos.first + 1; 
         }
         else {
             start = wantrow + 1;
@@ -203,9 +200,9 @@ bool Bishop::check_movement(int wantrow, int wantcol, chessboard* brd) {
 }
 
 bool King::check_movement(int wantrow, int wantcol) {
-        int drow = abs(cur_pos.first - wantrow);
-        int dcol = abs(cur_pos.second - wantcol);
+    int drow = abs(cur_pos.first - wantrow);
+    int dcol = abs(cur_pos.second - wantcol);
 
-        // King can move exactly one square in any direction
-        return (drow == 1 and dcol == 1);
-    }
+    // King can move exactly one square in any direction
+    return (drow == 1 and dcol == 1);
+}
