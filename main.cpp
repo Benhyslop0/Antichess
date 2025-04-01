@@ -15,7 +15,7 @@ int main()
 
     while (!gameover)
     {
-        w.printBoard();
+        w.printBoard(wplaying,bplaying);
         if (wplaying) {
             std::cout << "\n\n\n\n\n\nWhite's turn\n";
         }
@@ -35,9 +35,7 @@ int main()
             std::cout << "\n\n\n\n\n\n";
             nrow = input[1] - '1';
             ncol = input[0] - 'A';
-            std::cout << "Before cantake check" << std::endl;
             int takecheck = w.cantake(wplaying, bplaying);
-            std::cout << "After cantake check: " << takecheck << std::endl;
 
             bool mustcapture = (takecheck == 1); // If 1 means captures are available
 
@@ -76,7 +74,7 @@ int main()
                 std::cout << "White Wins!";
                 gameover = true;
             }
-            //need to make auto pass thing, leave to me for now but checks bishop correct
+
             else if (w.piece_is_taken() == true) {
                 std::cout << "draw";
                 gameover = true;
