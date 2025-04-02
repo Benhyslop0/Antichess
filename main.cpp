@@ -75,7 +75,7 @@ int main()
                 gameover = true;
             }
 
-            else if (w.piece_is_taken() == true) {
+            else if (w.piece_is_taken() == true or w.nomoves()==1) {
                 std::cout << "draw";
                 gameover = true;
             }
