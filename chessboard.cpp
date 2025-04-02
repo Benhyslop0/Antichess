@@ -444,7 +444,7 @@ int chessboard::updated_grid(int rowold, int colold, int rownew, int colnew, Pie
     return 0;
 }
 void chessboard::printBoard(bool wplaying, bool bplaying) {
-
+//tells terminal how to display board using nested loops decides what to print for each space based on if statements and whats there
 
     if (wplaying) {
         std::cout << "\n    A    B    C    D    E    F    G    H\n  ----------------------------------------\n";
@@ -763,7 +763,6 @@ int chessboard::cantake(bool wplaying, bool bplaying) {
     }
 
     if (bplaying and !bpieces.empty() and !wpieces.empty()) {
-        // std::cout << "i know blacks playing";
         for (int i = 0; i < bpieces.size(); i++) {
             for (int j = 0; j < wpieces.size(); j++) {
                 int wx, wy;
