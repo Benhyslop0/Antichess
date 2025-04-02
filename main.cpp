@@ -13,9 +13,9 @@ int main()
     chessboard w;  // Create an instance of ChessBoard
     // Show the ChessBoard as the main window
 
-    while (!gameover)
+    while (!gameover)// loop continues until a win condition is met
     {
-        w.printBoard(wplaying,bplaying);
+        w.printBoard(wplaying,bplaying); //calls to display board
         if (wplaying) {
             std::cout << "\n\n\n\n\n\nWhite's turn\n";
         }
@@ -25,7 +25,7 @@ int main()
 
         invalid_move = true;
 
-        while (invalid_move == true) {
+        while (invalid_move == true) { //automatic assumption move is invalid
             std::cout << "\n\n\n\n\n\nMove From: ";
             std::cin >> input;
             row = input[1] - '1';
@@ -34,7 +34,7 @@ int main()
             std::cin >> input;
             std::cout << "\n\n\n\n\n\n";
             nrow = input[1] - '1';
-            ncol = input[0] - 'A';
+            ncol = input[0] - 'A';// gets inputs from user and uses subtraction of ascii values
             int takecheck = w.cantake(wplaying, bplaying);
 
             bool mustcapture = (takecheck == 1); // If 1 means captures are available
