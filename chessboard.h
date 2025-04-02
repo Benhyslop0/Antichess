@@ -5,7 +5,7 @@
 class chessboard
 {
 public:
-
+//8*8 default grid with all info in it on game start
     Piece* arr[8][8] = {
         {new Rook(0,0, PieceColor::BLACK), new Knight(0,1, PieceColor::BLACK), new Bishop(0,2, PieceColor::BLACK),
          new Queen(0,3, PieceColor::BLACK), new King(0,4, PieceColor::BLACK), new Bishop(0,5, PieceColor::BLACK),
@@ -41,6 +41,7 @@ public:
 
     bool piece_is_taken(PieceType type = NONE, PieceColor colour = NONE_COLOR, Tile_color tile = NONE_TILE);
 private:
+//counters to ensure the game shouldnt be over later
     int wtaken = 16;
     int btaken = 16;
 
