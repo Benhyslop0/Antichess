@@ -3,7 +3,7 @@
 #include <utility>
 
 class chessboard;
-
+//enumerated types on each attribute makes code asier and readable
 enum PieceType {
     PAWN,
     ROOK,
@@ -40,6 +40,8 @@ public:
     virtual ~Piece() {};
 };
 
+
+//separate board aware class derives from piece this is for pieces that need to know the spaces around them on the board to check moves
 class BoardAware : public Piece {
 public:
     BoardAware(int x, int y, PieceColor colour, PieceType type) : Piece(x, y, colour, type) {};
