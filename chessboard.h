@@ -5,7 +5,7 @@
 class chessboard
 {
 public:
-
+    //8*8 default grid with all info in it on game start constructs all pieces on it aswell
     Piece* arr[8][8] = {
         {new Rook(0,0, PieceColor::BLACK), new Knight(0,1, PieceColor::BLACK), new Bishop(0,2, PieceColor::BLACK),
          new Queen(0,3, PieceColor::BLACK), new King(0,4, PieceColor::BLACK), new Bishop(0,5, PieceColor::BLACK),
@@ -28,16 +28,6 @@ public:
          new Queen(7,3, PieceColor::WHITE), new King(7,4, PieceColor::WHITE), new Bishop(7,5, PieceColor::WHITE),
          new Knight(7,6, PieceColor::WHITE), new Rook(7,7, PieceColor::WHITE)}
     };
-    /*t arr[8][8] = {
-        {1,2,3,4,5,3,2,1},
-        {6,6,6,6,6,6,6,6},
-        {0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0},
-        {0,0,0,0,0,0,0,0},
-        {7,7,7,7,7,7,7,7},
-        {8,9,10,11,12,10,9,8} //top is white (1-6),bottom is black (7-12),no mans land is defined by 0s
-    };*/
 
     int grid_pressed(int row, int col, int nrow, int ncol, bool wplaying, bool bplaying);
     int updated_grid(int rowold, int colold, int rownew, int colnew, Piece* piece, PieceType type);
@@ -50,13 +40,8 @@ public:
     int cantake(bool wplaying, bool bplaying);
 
     bool piece_is_taken(PieceType type = NONE, PieceColor colour = NONE_COLOR, Tile_color tile = NONE_TILE);
-
-
-
-    //a function to print the board
-
-
 private:
+    //counters to ensure the game shouldnt be over later
     int wtaken = 16;
     int btaken = 16;
 
@@ -70,3 +55,5 @@ private:
     int b_tile_bishop = 2;
     int clkco;
 };
+
+
