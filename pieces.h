@@ -89,7 +89,3 @@ public:
     King(int x, int y, PieceColor colour) : Piece(x, y, colour, PieceType::KING) {};
     bool check_movement(int x, int y) override;
 };
-
-
-
-

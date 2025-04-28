@@ -13,9 +13,10 @@ int main()
     bool invalid_move = true;
     bool ai = false;
     bool invalid_input = true;
+    
     chessboard w;  // Create an instance of ChessBoard
     // Show the ChessBoard as the main window
-    std::cout << "Welcome to Chess!\n";
+    std::cout << "Welcome to AntiChess!\n";
     std::cout << "Enter your moves in the format: A1 B2\n";
     std::cout << "Where A1 is the piece position you want to move from and B2 is the destination\n";
     std::cout << "single or multiplayer (1 or 0)\n";
@@ -38,10 +39,12 @@ int main()
         std::cout << "No ai selected\n";
     }
 
+
+
     while (!gameover)
     {
         //system("cls");
-        w.printBoard(wplaying ,bplaying);
+        w.printBoard(wplaying, bplaying);
         if (wplaying) {
             std::cout << "\n\n\n\n\n\nWhite's turn\n";
         }
@@ -50,15 +53,24 @@ int main()
         };
 
         invalid_move = true;
-            if(ai == true && bplaying == true) {
-                while (invalid_move == true) {
+        if (ai == true && bplaying == true) {
+            while (invalid_move == true) {
                 //std::cout << "AI is thinking...\n";
-                int row = 0 + (rand() % 7);
-                int col = 0 + (rand() % 7);
-                int nrow = 0 + (rand() % 7);
-                int ncol = 0 + (rand() % 7);
                 int takecheck = w.cantake(wplaying, bplaying);
-                bool mustcapture = (takecheck == 1); // If 1 means captures are available
+                bool mustcapture = (takecheck == 1);
+                if(!mustcapture) {
+                    row = 0 + (rand() % 7);
+                    col = 0 + (rand() % 7);
+                    nrow = 0 + (rand() % 7);
+                    ncol = 0 + (rand() % 7);
+                }
+                else if(mustcapture) {
+                    row = w.return_move_from_x();
+                    col = w.return_move_from_y();
+                    nrow = w.return_needed_x();
+                    ncol = w.return_needed_y();
+                }
+                 // If 1 means captures are available
 
                 bool iscapturing = (w.arr[nrow][ncol] != nullptr &&
                     ((wplaying && w.arr[nrow][ncol]->get_colour() == BLACK) ||
@@ -68,13 +80,13 @@ int main()
                     std::cout << "Capture is available! You must capture when possible.";
                     invalid_move = true;
                 }
-                if (w.arr[row][col] != nullptr && w.arr[row][col]->get_colour() == BLACK) {
+                else if (w.arr[row][col] != nullptr && w.arr[row][col]->get_colour() == BLACK) {
                     if (w.grid_pressed(row, col, nrow, ncol, wplaying, bplaying) == 0) {
                         std::cout << "Invalid Move!";
                         invalid_move = true;
-                        
+
                     }
-                    else{  
+                    else {
                         //std::cout << "AI has moved\n";
                         std::cout << "AI has moved from " << char(col + 'A') << row + 1 << " to " << char(ncol + 'A') << nrow + 1 << "\n";
                         invalid_move = false;
@@ -87,17 +99,29 @@ int main()
                             wplaying = true;
                             bplaying = false;
                         }
-                    
+
                     }
                 }
-                
-                
+                if (w.is_black_gone() == true) {
+                    std::cout << "Black Wins!";
+                    gameover = true;
+                }
+                else if (w.is_white_gone() == true) {
+                    std::cout << "White Wins!";
+                    gameover = true;
+                }
+                //need to make auto pass thing, leave to me for now but checks bishop correct
+                else if (w.piece_is_taken() == true or w.nomoves(wplaying, bplaying) == 1) {
+                    std::cout << "Draw";
+                    gameover = true;
+                }
+
             }
-            }
-            else {
-                while (invalid_move == true) {
+        }
+        else {
+            while (invalid_move == true) {
                 //std::cout << "AI is not selected\n";
-            
+
                 std::cout << "\n\n\n\n\n\nMove From: ";
                 std::cin >> input;
                 row = input[1] - '1';
@@ -125,8 +149,9 @@ int main()
                 if (mustcapture && !iscapturing) {
                     std::cout << "Capture is available! You must capture when possible.";
                     invalid_move = true;
+                    
                 }
-                if (w.grid_pressed(row, col, nrow, ncol, wplaying, bplaying) == 0) {
+                else if (w.grid_pressed(row, col, nrow, ncol, wplaying, bplaying) == 0) {
                     std::cout << "Invalid Move!";
                     invalid_move = true;
                 }
@@ -142,25 +167,25 @@ int main()
                         bplaying = false;
                     }
                 }
-                
+
                 //checking if the game is over by elimination
-                
-                }
+
+            }
             if (w.is_black_gone() == true) {
-                    std::cout << "Black Wins!";
-                    gameover = true;
-                }
-                else if (w.is_white_gone() == true) {
-                    std::cout << "White Wins!";
-                    gameover = true;
-                }
-                //need to make auto pass thing, leave to me for now but checks bishop correct
-                else if (w.piece_is_taken() == true or w.nomoves(wplaying,bplaying)==1) {
-                    std::cout << "Draw";
-                    gameover = true;
-                }
+                std::cout << "Black Wins!";
+                gameover = true;
+            }
+            else if (w.is_white_gone() == true) {
+                std::cout << "White Wins!";
+                gameover = true;
+            }
+            //need to make auto pass thing, leave to me for now but checks bishop correct
+            else if (w.piece_is_taken() == true or w.nomoves(wplaying, bplaying) == 1) {
+                std::cout << "Draw";
+                gameover = true;
             }
         }
+    }
 
     return 0;
 }

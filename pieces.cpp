@@ -115,7 +115,7 @@ bool Knight::check_movement(int wantrow, int wantcol) {
     return ((rowdiff == 1 and coldiff == 2) or (rowdiff == 2 and coldiff == 1));
 }// if the magnitude of these changes are a combination of a 1 and 2 between rows and columns its a valid move for a knight
 
- 
+
 int dir(int x) {
     if (x > 0) {
         return 1;
@@ -150,7 +150,8 @@ bool Queen::check_movement(int wantrow, int wantcol, chessboard* brd) {
     }
     if (cur_pos.second == wantcol) {
         if (cur_pos.first < wantrow) {
-            start = cur_pos.first + 1; 
+            start = cur_pos.first + 1;
+            end = wantrow;
         }
         else {
             start = wantrow + 1;
@@ -204,7 +205,7 @@ bool Bishop::check_movement(int wantrow, int wantcol, chessboard* brd) {
 bool King::check_movement(int wantrow, int wantcol) {
     int drow = abs(cur_pos.first - wantrow);
     int dcol = abs(cur_pos.second - wantcol);
-
+    //std::cout << drow << " " << dcol << "\n";
     // King can move exactly one square in any direction
     return (drow == 1 and dcol == 1);
 }

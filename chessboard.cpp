@@ -50,7 +50,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
             else {
                 if (colour2 == PieceColor::WHITE) {
                     updated_grid(row, col, nrow, ncol, piece, PieceType::ROOK);
-                    piece_is_taken(piece2->get_type());
+                    piece_is_taken(piece2->get_type(),colour2);
                     return 1;
                 }
                 else if (colour2 == PieceColor::BLACK) {
@@ -74,8 +74,8 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
             else {
                 if (colour2 == PieceColor::WHITE) {
                     updated_grid(row, col, nrow, ncol, piece, PieceType::KNIGHT);
-                    piece_is_taken(piece2->get_type());
-  
+                    piece_is_taken(piece2->get_type(),colour2);
+
                     return 1;
                 }
                 else if (colour2 == PieceColor::BLACK) {
@@ -98,7 +98,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
             else {
                 if (colour2 == PieceColor::WHITE) {
                     updated_grid(row, col, nrow, ncol, piece, PieceType::BISHOP);
-                    piece_is_taken(piece2->get_type());
+                    piece_is_taken(piece2->get_type(),colour2);
                     return 1;
                 }
                 else if (colour2 == PieceColor::BLACK) {
@@ -123,7 +123,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
             else {
                 if (colour2 == PieceColor::WHITE) {
                     updated_grid(row, col, nrow, ncol, piece, PieceType::QUEEN);
-                    piece_is_taken(piece2->get_type());
+                    piece_is_taken(piece2->get_type(),colour2);
                     return 1;
                 }
                 else if (colour2 == PieceColor::BLACK) {
@@ -147,7 +147,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
             else {
                 if (colour2 == PieceColor::WHITE) {
                     updated_grid(row, col, nrow, ncol, piece, PieceType::KING);
-                    piece_is_taken(piece2->get_type());
+                    piece_is_taken(piece2->get_type(),colour2);
                     return 1;
                 }
                 else if (colour2 == PieceColor::BLACK) {
@@ -163,9 +163,9 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
 
 
         case PAWN:
-          
-              //is a pawn
-              //a good example of how grid asks pawn if it can move to a position
+
+            //is a pawn
+            //a good example of how grid asks pawn if it can move to a position
             boardAwarePiece = dynamic_cast<BoardAware*>(piece);
             if (!boardAwarePiece->check_movement(nrow, ncol, this)) {
                 clkco = 0;
@@ -180,7 +180,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
                     int choice;  // Take input as an integer
 
                     while (invalid) {
-                          std::cout << "Promote to (1: Rook, 2: Knight, 3: Bishop, 4: Queen): ";
+                        std::cout << "Promote to (1: Rook, 2: Knight, 3: Bishop, 4: Queen): ";
                         std::cin >> choice;
 
                         if (choice >= 1 && choice <= 4) {
@@ -188,12 +188,12 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
                             invalid = false;
                         }
                         else {
-                                std::cout << "Invalid choice! Please enter 1, 2, 3, or 4.\n";
+                            std::cout << "Invalid choice! Please enter 1, 2, 3, or 4.\n";
                         }
                     }
                 }
                 updated_grid(row, col, nrow, ncol, piece, pos);
-                piece_is_taken(piece2->get_type());
+                piece_is_taken(piece2->get_type(),colour2);
                 return 1;
             }
 
@@ -204,7 +204,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
                     int choice;  // Take input as an integer
 
                     while (invalid) {
-                          std::cout << "Promote to (1: Rook, 2: Knight, 3: Bishop, 4: Queen): ";
+                        std::cout << "Promote to (1: Rook, 2: Knight, 3: Bishop, 4: Queen): ";
                         std::cin >> choice;
 
                         if (choice >= 1 && choice <= 4) {
@@ -212,7 +212,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
                             invalid = false;
                         }
                         else {
-                                std::cout << "Invalid choice! Please enter 1, 2, 3, or 4.\n";
+                            std::cout << "Invalid choice! Please enter 1, 2, 3, or 4.\n";
                         }
                     }
                 }
@@ -243,7 +243,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
                         int choice;  // Take input as an integer
 
                         while (invalid) {
-                              std::cout << "Promote to (1: Rook, 2: Knight, 3: Bishop, 4: Queen): ";
+                            std::cout << "Promote to (1: Rook, 2: Knight, 3: Bishop, 4: Queen): ";
                             std::cin >> choice;
 
                             if (choice >= 1 && choice <= 4) {
@@ -251,13 +251,13 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
                                 invalid = false;
                             }
                             else {
-                                   std::cout << "Invalid choice! Please enter 1, 2, 3, or 4.\n";
+                                std::cout << "Invalid choice! Please enter 1, 2, 3, or 4.\n";
                             }
                         }
                     }
 
                     updated_grid(row, col, nrow, ncol, piece, pos);
-                    piece_is_taken(piece2->get_type());
+                    piece_is_taken(piece2->get_type(),colour2);
                     return 1;
 
                 }
@@ -271,7 +271,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
                         int choice;  // Take input as an integer
 
                         while (invalid) {
-                              std::cout << "Promote to (1: Rook, 2: Knight, 3: Bishop, 4: Queen): ";
+                            std::cout << "Promote to (1: Rook, 2: Knight, 3: Bishop, 4: Queen): ";
                             std::cin >> choice;
 
                             if (choice >= 1 && choice <= 4) {
@@ -279,7 +279,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
                                 invalid = false;
                             }
                             else {
-                                   std::cout << "Invalid choice! Please enter 1, 2, 3, or 4.\n";
+                                std::cout << "Invalid choice! Please enter 1, 2, 3, or 4.\n";
                             }
                         }
                     }
@@ -303,7 +303,7 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
             else {
                 if (colour2 == BLACK) {
                     updated_grid(row, col, nrow, ncol, piece, pos);
-                    piece_is_taken(piece2->get_type());
+                    piece_is_taken(piece2->get_type(),colour2);
                     return 1;
                 }
                 else if (colour2 == WHITE) {
@@ -445,7 +445,7 @@ int chessboard::updated_grid(int rowold, int colold, int rownew, int colnew, Pie
     return 0;
 }
 void chessboard::printBoard(bool wplaying, bool bplaying) {
-//tells terminal how to display board using nested loops decides what to print for each space based on if statements and whats there
+    //tells terminal how to display board using nested loops decides what to print for each space based on if statements and whats there
 
     if (wplaying) {
         std::cout << "\n    A    B    C    D    E    F    G    H\n  ----------------------------------------\n";
@@ -580,7 +580,7 @@ bool chessboard::piece_is_taken(PieceType piecenum, PieceColor colour, Tile_colo
         if (colour == WHITE) {
             wtaken--;
         }
-        else {
+        else if(colour == BLACK) {
             btaken--;
         }
 
@@ -590,7 +590,7 @@ bool chessboard::piece_is_taken(PieceType piecenum, PieceColor colour, Tile_colo
         if (colour == WHITE) {
             wtaken--;
         }
-        else {
+        else if(colour == BLACK) {
             btaken--;
         }
     }
@@ -599,13 +599,13 @@ bool chessboard::piece_is_taken(PieceType piecenum, PieceColor colour, Tile_colo
         if (colour == WHITE) {
             wtaken--;
         }
-        else {
+        else if(colour == BLACK) {
             btaken--;
         }
         if (tile == WHITE_TILE) {
             w_tile_bishop--;
         }
-        else {
+        else if(tile == BLACK_TILE) {
             b_tile_bishop--;
         }
     }
@@ -614,7 +614,7 @@ bool chessboard::piece_is_taken(PieceType piecenum, PieceColor colour, Tile_colo
         if (colour == WHITE) {
             wtaken--;
         }
-        else {
+        else if(colour == BLACK) {
             btaken--;
         }
     }
@@ -623,7 +623,7 @@ bool chessboard::piece_is_taken(PieceType piecenum, PieceColor colour, Tile_colo
         if (colour == WHITE) {
             wtaken--;
         }
-        else {
+        else if(colour == BLACK) {
             btaken--;
         }
     }
@@ -632,7 +632,7 @@ bool chessboard::piece_is_taken(PieceType piecenum, PieceColor colour, Tile_colo
             wptaken--;
             wtaken--;
         }
-        else {
+        else if(colour == BLACK) {
             bptaken--;
             btaken--;
         }
@@ -747,15 +747,18 @@ int chessboard::cantake(bool wplaying, bool bplaying) {
                 PieceType type = wpieces.at(i)->get_type();
                 if (type == KING or type == KNIGHT) {
                     if (wpieces.at(i)->check_movement(bx, by)) {
-
-                        std::cout << type;
+                        std::tie(move_from_x, move_from_y) = wpieces.at(i)->get_pos();
+                        need_to_move_x = bx;
+                        need_to_move_y = by;
                         return 1;
                     }
                 }
                 if (type == QUEEN or type == BISHOP or type == ROOK or type == PAWN) {
                     BoardAware* boardAwarePiece = dynamic_cast<BoardAware*>(wpieces.at(i));
                     if (boardAwarePiece->check_movement(bx, by, this)) {
-
+                       std::tie(move_from_x, move_from_y) = wpieces.at(i)->get_pos();
+                        need_to_move_x = bx;
+                        need_to_move_y = by;
                         return 1;
                     }
                 }
@@ -771,13 +774,18 @@ int chessboard::cantake(bool wplaying, bool bplaying) {
                 PieceType type = bpieces.at(i)->get_type();
                 if (type == KING or type == KNIGHT) {
                     if (bpieces.at(i)->check_movement(wx, wy)) {
-
+                        std::tie(move_from_x, move_from_y) = bpieces.at(i)->get_pos();
+                        need_to_move_x = wx;
+                        need_to_move_y = wy;
                         return 1;
                     }
                 }
                 if (type == QUEEN or type == BISHOP or type == ROOK or type == PAWN) {
                     BoardAware* boardAwarePiece = dynamic_cast<BoardAware*>(bpieces.at(i));
                     if (boardAwarePiece->check_movement(wx, wy, this)) {
+                        std::tie(move_from_x, move_from_y) = bpieces.at(i)->get_pos();
+                        need_to_move_x = wx;
+                        need_to_move_y = wy;
                         return 1;
                     }
 
@@ -786,4 +794,17 @@ int chessboard::cantake(bool wplaying, bool bplaying) {
         }
     }
     return 0;
+}
+
+int chessboard::return_needed_x() {
+    return need_to_move_x;
+}
+int chessboard::return_needed_y() {
+    return need_to_move_y;
+}
+int chessboard::return_move_from_x() {
+    return move_from_x;
+}
+int chessboard::return_move_from_y() {
+    return move_from_y;
 }
