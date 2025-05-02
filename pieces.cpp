@@ -205,7 +205,6 @@ bool Bishop::check_movement(int wantrow, int wantcol, chessboard* brd) {
 bool King::check_movement(int wantrow, int wantcol) {
     int drow = abs(cur_pos.first - wantrow);
     int dcol = abs(cur_pos.second - wantcol);
-    //std::cout << drow << " " << dcol << "\n";
     // King can move exactly one square in any direction
-    return (drow == 1 and dcol == 1);
+    return ((drow <= 1 and dcol <= 1) and (drow >0 or dcol >0));
 }
