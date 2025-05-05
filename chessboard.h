@@ -40,6 +40,10 @@ public:
     int cantake(bool wplaying, bool bplaying);
 
     bool piece_is_taken(PieceType type = NONE, PieceColor colour = NONE_COLOR, Tile_color tile = NONE_TILE);
+    int return_needed_x();
+    int return_needed_y();
+    int return_move_from_x();
+    int return_move_from_y();
 private:
     //counters to ensure the game shouldnt be over later
     int wtaken = 16;
@@ -54,6 +58,8 @@ private:
     int w_tile_bishop = 2;
     int b_tile_bishop = 2;
     int clkco;
+    int need_to_move_x;
+    int need_to_move_y;
+    int move_from_x;
+    int move_from_y;
 };
-
-
