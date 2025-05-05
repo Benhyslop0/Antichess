@@ -277,6 +277,8 @@ int chessboard::grid_pressed(int row, int col, int nrow, int ncol, bool wplaying
                             if (choice >= 1 && choice <= 4) {
                                 pos = static_cast<PieceType>(choice);  // Convert integer to enum
                                 invalid = false;
+                                //late at night but i think this fixes draw issue
+                                //piece_is_taken(piece2->get_type(),colour2);
                             }
                             else {
                                 std::cout << "Invalid choice! Please enter 1, 2, 3, or 4.\n";
@@ -630,17 +632,28 @@ bool chessboard::piece_is_taken(PieceType piecenum, PieceColor colour, Tile_colo
     else if (piecenum == PAWN) {
         if (colour == WHITE) {
             wptaken--;
+            std::cout << "wptaken: " << wptaken << "\n";
             wtaken--;
+            std::cout << "wtaken: " << wtaken << "\n";
         }
         else if(colour == BLACK) {
             bptaken--;
+            std::cout << "bptaken: " << bptaken << "\n";
             btaken--;
+            std::cout << "btaken: " << btaken << "\n";
         }
     }
+    //might have broken soething here
+    else if (piecenum == NONE) {
+        std::cout << "Error: No piece type specified.\n";
+    }
     if (wptaken == 0 && bptaken == 0 && rookco == 0 && knightco == 0 && queenco == 0 && kingco == 0 && bishopco == 2 && w_tile_bishop == 1 && b_tile_bishop == 1) {
+        std::cout << "first if";
         return true;
     }
+    //not sure but issue is possibly in wptaken or bptaken
     else if (wptaken == 0 && bptaken == 0 && rookco == 0 && knightco == 0 && queenco == 0 && kingco == 2 && bishopco == 0) {
+        std::cout <<"second if";
         return true;
     }
     else {
@@ -688,12 +701,13 @@ int chessboard::nomoves(bool wplaying, bool bplaying) {
                     if (piece->check_movement(row1, col + 1, this)) {
                         return 0;
                     }
-                    if (piece->check_movement(row1, col - 1, this)) {
+                    if (piece->check_movement(row1, col - 1, this)){
                         return 0;
                     }
                 }
             }
         }
+        std::cout<<"no moves w";
         return 1;
     }
 
@@ -720,6 +734,7 @@ int chessboard::nomoves(bool wplaying, bool bplaying) {
             }
         }
     }
+    std::cout<<"no moves b";
     return 1;
 }
 
@@ -805,6 +820,6 @@ int chessboard::return_needed_y() {
 int chessboard::return_move_from_x() {
     return move_from_x;
 }
-int chessboard::return_move_from_y() {
+int chessboard::return_move_from_y(){
     return move_from_y;
 }

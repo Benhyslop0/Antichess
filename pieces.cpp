@@ -207,5 +207,7 @@ bool King::check_movement(int wantrow, int wantcol) {
     int dcol = abs(cur_pos.second - wantcol);
     //std::cout << drow << " " << dcol << "\n";
     // King can move exactly one square in any direction
-    return (drow == 1 and dcol == 1);
+    int sum = sqrt(drow * drow + dcol * dcol);
+    return (sum == 1 || sum == sqrt(2)); // Check if the move is one square away in any direction
+    //return (drow == 1 and dcol == 1);
 }
