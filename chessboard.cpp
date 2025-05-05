@@ -672,7 +672,7 @@ bool chessboard::is_black_gone() {
 int chessboard::nomoves(bool wplaying, bool bplaying) {
     BoardAware* piece;
     int row1, col;
-
+    bool check = false;
     if (bplaying) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -683,18 +683,26 @@ int chessboard::nomoves(bool wplaying, bool bplaying) {
                     col = piece->get_pos().second;
                     //also since pawn check movemnet expects a pointer to the board class i had to pass "this" in
                     if (piece->check_movement(row1, col, this)) {
-                        return 0;
+                        check = true;
+                        //return 0;
                     }
                     if (piece->check_movement(row1, col + 1, this)) {
-                        return 0;
+                        check = true;
+                        //return 0;
                     }
                     if (piece->check_movement(row1, col - 1, this)) {
-                        return 0;
+                        check = true;
+                        //return 0;
                     }
                 }
             }
         }
-        return 1;
+        if(check == true && kingco < 2 && bishopco < 2 && rookco < 2 && knightco < 2 && queenco < 2) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
     }
 
     if (wplaying) {
@@ -702,25 +710,34 @@ int chessboard::nomoves(bool wplaying, bool bplaying) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if (this->arr[i][j] != nullptr && this->arr[i][j]->get_colour() == WHITE && this->arr[i][j]->get_type() == PAWN) {
+
                     piece = dynamic_cast<BoardAware*>(this->arr[i][j]);
                     row1 = piece->get_pos().first - 1;
-
                     col = piece->get_pos().second;
 
                     if (piece->check_movement(row1, col, this)) {
-                        return 0;
+                        check = true;
+                        //return 0;
                     }
                     if (piece->check_movement(row1, col + 1, this)) {
-                        return 0;
+                        check = true;
+                        //return 0;
                     }
                     if (piece->check_movement(row1, col - 1, this)) {
-                        return 0;
+                        check = true;
+                        //return 0;
                     }
                 }
             }
         }
+        if(check == true && kingco < 2 && bishopco < 2 && rookco <2 && knightco <2 && queenco <2) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
     }
-    return 1;
+    
 }
 
 int chessboard::cantake(bool wplaying, bool bplaying) {
