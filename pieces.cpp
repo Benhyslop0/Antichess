@@ -20,7 +20,9 @@ PieceColor Piece::get_colour() {
     return colour;
 }
 
-
+Tile_color Piece::get_tile_color() {
+    return tile_color;
+}
 //movement checks
 bool Pawn::check_movement(int x, int y, chessboard* brd) {
     if (colour == WHITE) {
@@ -62,10 +64,6 @@ bool Rook::check_movement(int wantrow, int wantcol, chessboard* brd) {
     if (cur_pos.first != wantrow and cur_pos.second != wantcol) {
         return false;
     } //makes sure the move actually is in line before even bothering with the rest
-
-
-
-
     if (cur_pos.first == wantrow) {
         if (cur_pos.second < wantcol) {
             start = cur_pos.second + 1;
@@ -82,9 +80,6 @@ bool Rook::check_movement(int wantrow, int wantcol, chessboard* brd) {
         }
         return true;
     }
-
-
-
 
     if (cur_pos.second == wantcol) {
         if (cur_pos.first < wantrow) {
@@ -105,8 +100,6 @@ bool Rook::check_movement(int wantrow, int wantcol, chessboard* brd) {
     }
 
     return false;
-
-
 }
 
 bool Knight::check_movement(int wantrow, int wantcol) {
@@ -114,7 +107,6 @@ bool Knight::check_movement(int wantrow, int wantcol) {
     int coldiff = abs(cur_pos.second - wantcol);
     return ((rowdiff == 1 and coldiff == 2) or (rowdiff == 2 and coldiff == 1));
 }// if the magnitude of these changes are a combination of a 1 and 2 between rows and columns its a valid move for a knight
-
 
 int dir(int x) {
     if (x > 0) {
@@ -127,7 +119,6 @@ int dir(int x) {
         return -1;
     }
 }//later used direction of movement function will pass both x and y changes into it to check this
-
 
 bool Queen::check_movement(int wantrow, int wantcol, chessboard* brd) {
     int start;
@@ -182,7 +173,6 @@ bool Queen::check_movement(int wantrow, int wantcol, chessboard* brd) {
     }//bishop code
     return false;
 }
-
 
 bool Bishop::check_movement(int wantrow, int wantcol, chessboard* brd) {
     int drow = wantrow - cur_pos.first;
